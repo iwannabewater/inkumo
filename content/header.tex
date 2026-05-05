@@ -1,0 +1,35 @@
+%% content/header.tex — Resume header
+%%
+%% \inkumoheader takes 5 parameters; the brackets [] are LaTeX optional args:
+%%   #1 name             (required)
+%%   #2 alias / EN name  (optional, in stone gray, baseline-aligned)
+%%   #3 contact line     (required, freeform — uses \ContactItem and \contactsep)
+%%   #4 role / title     (optional, top-right brand color)
+%%   #5 summary          (optional paragraph below contact)
+
+\inkumoheader
+  {蔡~徐坤}                            % name (CN, with hairspace between chars for breathing)
+  [Cai Xukun]                           % English alias / pinyin
+  {%
+    \ContactItem{phone}{(+86)~133-3333-3333}%
+    \contactsep
+    \ContactItem{email}{\href{mailto:caixukun@example.com}{caixukun@example.com}}%
+    \contactsep
+    \ContactItem{github}{\href{https://github.com/caixukun-dev}{github.com/caixukun-dev}}%
+    \contactsep
+    \ContactItem{telegram}{\href{https://t.me/cai_xukun}{@cai\_xukun}}%
+    \contactsep
+    \ContactItem{website}{\href{https://caixukun.dev}{caixukun.dev}}%
+    \\[1.4pt]%
+    \ContactItem{education}{某某大学}%
+    \contactsep
+    \ContactItem{major}{计算机科学与技术}%
+    \contactsep
+    \ContactItem{linkedin}{\href{https://linkedin.com/in/cai-xukun}{linkedin.com/in/cai-xukun}}%
+    \contactsep
+    \ContactItem{location}{北京}%
+  }
+  [全栈 / 云计算方向]                   % role
+  [%
+    简历示例内容，基于公开模板生成，仅用于演示版式与排版细节。计算机科学专业在读，主攻全栈开发与云原生基础设施，在校期间参与多项实验室项目，长期关注分布式系统与可观测性方向。%
+  ]

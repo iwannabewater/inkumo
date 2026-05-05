@@ -1,0 +1,56 @@
+%% content/projects.tex — 项目经历
+%%
+%% Each project follows the editorial pattern:
+%%   \Project{Name}{Type}[Optional role pill]{Date range}
+%%   \Stack{...}    — tech stack line
+%%   \Desc{...}     — one-paragraph description
+%%   Bullets        — concrete contributions (≤ 3-4 items per project)
+
+\inkumosection{项目经历}
+
+\Project
+  {轻量级容器云平台}
+  {实验室项目}
+  [方向主导]
+  {2022.03 — 2022.12}
+\Stack{Go\sep Kubernetes\sep Operator SDK\sep Prometheus\sep React}
+\Desc{%
+  面向高校实验室场景的容器编排平台,在 Kubernetes 之上提供面向多租户的 Web 控制台,
+  把 \emph{学院共享集群} 的资源申请与回收时延从 \hl{两到三天} 缩短到 \hl{分钟级}。%
+}
+\begin{Bullets}
+  \item 设计并实现了基于 RBAC 的多租户权限模型,引入命名空间配额与软隔离,审计日志接入 Loki
+  \item 开发资源动态伸缩与负载均衡控制器,Pod 调度命中率提升至 \hl{94\%},冷启动 P95 降至 \hl{1.3 秒}
+  \item 使用 Prometheus + Grafana + Alertmanager 构建监控告警链路,值守告警噪声下降 \hl{63\%}
+\end{Bullets}
+
+\Project
+  {分布式缓存系统 \texttt{kache}}
+  {个人项目}
+  [独立开发]
+  {2023.01 — 2023.04}
+\Stack{Go\sep Raft\sep Redis 协议\sep etcd}
+\Desc{%
+  支持水平扩展的高性能缓存,实现 Redis Wire 协议的子集,支撑 \hl{单机 12 万 QPS}、
+  \hl{P99 < 2.4ms} 的读路径,作为研究生课程的分布式系统期末项目并开源到 GitHub。%
+}
+\begin{Bullets}
+  \item 一致性哈希分片 + 虚拟节点扩容,扩容期间错误率 \hl{< 0.05\%}
+  \item Raft 协议保证 leader 故障切换 \hl{< 800ms},通过 Jepsen 风格压测六小时无数据丢失
+  \item LRU + TTL 双重淘汰策略,内存利用率提升 \hl{37\%},热点 key 自动复制至两副本
+\end{Bullets}
+
+\Project
+  {开源 Markdown 笔记 \texttt{Inkstone}}
+  {独立开源}
+  [作者]
+  {2023.06 — 持续维护}
+\Stack{Rust\sep Tauri\sep CodeMirror 6\sep WebAssembly}
+\Desc{%
+  双链笔记 + 数学排版的轻量桌面应用,Apple Silicon 原生支持,首版发布两周内
+  GitHub 收获 \hl{2.3k stars},作为 Rust 中文社区周刊年度推荐项目。%
+}
+\begin{Bullets}
+  \item Rust 后端 + Tauri 容器,安装包体积压缩到 \hl{6.8 MB}(同类 Electron 项目均值 80MB+)
+  \item 原创双链解析器与 LSP 桥接,支持 \texttt{[[wiki-link]]} 跨笔记跳转,索引耗时 < \hl{120ms}/万节点
+\end{Bullets}

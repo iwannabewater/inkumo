@@ -1,0 +1,210 @@
+%% lib/icons.tex — Platform icon registry.
+%%
+%% Edit this file to swap any platform glyph. The interface is one line per
+%% platform:
+%%
+%%     \definePIcon{<name>}{<glyph macro>}
+%%
+%% Glyph macros come from the fontawesome5 package (default backend) — see
+%% https://ctan.org/pkg/fontawesome5 for the full list. You can also define
+%% your own custom glyph (e.g. inline TeX, an image, an SVG) and bind it to a
+%% name; the rest of the resume will pick it up wherever \PIcon{<name>} is
+%% used.
+%%
+%% Sizing & color come from \PIcon — do not embed those in your mapping;
+%% just give the glyph itself.
+%%
+%% Example overrides:
+%%   \definePIcon{wechat}{\textbf{\textsc{wx}}}      % literal text
+%%   \definePIcon{blog}{\faRssSquare}                % FA RSS square
+%%   \definePIcon{xiaohongshu}{\textbf{XHS}}         % no FA glyph yet — use text
+
+%% ----------------------------------------------------------------------
+%% Internal storage + lookup
+%% ----------------------------------------------------------------------
+\makeatletter
+\NewDocumentCommand{\definePIcon}{m m}{%
+  \expandafter\def\csname inkumo@picon@#1\endcsname{#2}%
+}
+\NewDocumentCommand{\PIcon}{m}{%
+  \begingroup
+  \color{kami@darkwarm}%
+  \fontsize{8.8pt}{8.8pt}\selectfont
+  \ifcsname inkumo@picon@#1\endcsname
+    \csname inkumo@picon@#1\endcsname
+  \else
+    \faQuestionCircle
+  \fi
+  \endgroup
+}
+\makeatother
+
+%% ----------------------------------------------------------------------
+%% Default glyph mappings
+%% These cover the vast majority of resume contact lines. Edit freely.
+%% ----------------------------------------------------------------------
+
+% --- Communication ---------------------------------------------------------
+\definePIcon{phone}{\faPhone}
+\definePIcon{phone-square}{\faPhoneSquare}
+\definePIcon{phone-volume}{\faPhoneVolume}
+\definePIcon{mobile}{\faMobile}
+\definePIcon{email}{\faEnvelope}
+\definePIcon{mail}{\faEnvelope}
+\definePIcon{envelope}{\faEnvelope}
+\definePIcon{message}{\faEnvelopeOpenText}
+\definePIcon{address}{\faMapMarker}
+\definePIcon{location}{\faMapMarker}
+\definePIcon{calendar-check}{\faCalendarCheck}
+
+% --- Code-host & developer profiles ----------------------------------------
+\definePIcon{github}{\faGithub}
+\definePIcon{github-square}{\faGithubSquare}
+\definePIcon{gitlab}{\faGitlab}
+\definePIcon{bitbucket}{\faBitbucket}
+\definePIcon{stackoverflow}{\faStackOverflow}
+\definePIcon{stack-overflow}{\faStackOverflow}
+\definePIcon{devto}{\faDev}
+\definePIcon{dev}{\faDev}
+\definePIcon{codepen}{\faCodepen}
+\definePIcon{jsfiddle}{\faJsfiddle}
+\definePIcon{producthunt}{\faProductHunt}
+\definePIcon{product-hunt}{\faProductHunt}
+\definePIcon{orcid}{\faOrcid}
+
+% --- Social ----------------------------------------------------------------
+\definePIcon{twitter}{\faTwitter}
+\definePIcon{x}{\faTwitter}                     % FA hasn't shipped X yet — alias to twitter
+\definePIcon{linkedin}{\faLinkedin}
+\definePIcon{linkedin-in}{\faLinkedinIn}
+\definePIcon{facebook}{\faFacebook}
+\definePIcon{messenger}{\faFacebookMessenger}
+\definePIcon{instagram}{\faInstagram}
+\definePIcon{youtube}{\faYoutube}
+\definePIcon{telegram}{\faTelegram}
+\definePIcon{telegram-plane}{\faTelegramPlane}
+\definePIcon{discord}{\faDiscord}
+\definePIcon{slack}{\faSlack}
+\definePIcon{whatsapp}{\faWhatsapp}
+\definePIcon{skype}{\faSkype}
+\definePIcon{mastodon}{\faMastodon}
+\definePIcon{reddit}{\faReddit}
+\definePIcon{medium}{\faMedium}
+\definePIcon{dribbble}{\faDribbble}
+\definePIcon{behance}{\faBehance}
+\definePIcon{figma}{\faFigma}
+\definePIcon{twitch}{\faTwitch}
+\definePIcon{steam}{\faSteam}
+\definePIcon{keybase}{\faKeybase}
+\definePIcon{patreon}{\faPatreon}
+
+% --- Chinese platforms ------------------------------------------------------
+\definePIcon{weibo}{\faWeibo}
+\definePIcon{wechat}{\faWeixin}
+\definePIcon{weixin}{\faWeixin}
+\definePIcon{qq}{\faQq}
+\definePIcon{zhihu}{{\fontsize{8pt}{8pt}\selectfont\bfseries 知}}
+\definePIcon{bilibili}{{\fontsize{8pt}{8pt}\selectfont\bfseries B}}
+\definePIcon{douyin}{{\fontsize{8pt}{8pt}\selectfont\bfseries 抖}}
+\definePIcon{xiaohongshu}{{\fontsize{8pt}{8pt}\selectfont\bfseries 小}}
+\definePIcon{juejin}{{\fontsize{8pt}{8pt}\selectfont\bfseries 掘}}
+
+% --- Web / blog ------------------------------------------------------------
+\definePIcon{globe}{\faGlobe}
+\definePIcon{website}{\faGlobe}
+\definePIcon{blog}{\faRssSquare}
+\definePIcon{rss}{\faRss}
+\definePIcon{link}{\faLink}
+\definePIcon{portfolio}{\faGlobe}
+\definePIcon{wordpress}{\faWordpress}
+\definePIcon{wordpress-simple}{\faWordpressSimple}
+\definePIcon{medium-blog}{\faMedium}
+
+% --- Education / role marks ------------------------------------------------
+\definePIcon{school}{\faUniversity}
+\definePIcon{education}{\faGraduationCap}
+\definePIcon{major}{\faBookOpen}
+\definePIcon{role}{\faIdBadge}
+\definePIcon{company}{\faBuilding}
+\definePIcon{lab}{\faFlask}
+\definePIcon{research}{\faMicroscope}
+\definePIcon{publication}{\faScroll}
+\definePIcon{scholar}{\faGoogle}
+\definePIcon{google-scholar}{\faGoogle}
+
+% --- Operating systems / dev tools ----------------------------------------
+\definePIcon{linux}{\faLinux}
+\definePIcon{ubuntu}{\faUbuntu}
+\definePIcon{centos}{\faCentos}
+\definePIcon{fedora}{\faFedora}
+\definePIcon{windows}{\faWindows}
+\definePIcon{apple}{\faApple}
+\definePIcon{macos}{\faApple}
+\definePIcon{android}{\faAndroid}
+\definePIcon{chrome}{\faChrome}
+\definePIcon{firefox}{\faFirefox}
+\definePIcon{edge}{\faEdge}
+\definePIcon{safari}{\faSafari}
+\definePIcon{docker}{\faDocker}
+\definePIcon{git}{\faGit}
+\definePIcon{git-square}{\faGitSquare}
+\definePIcon{gitkraken}{\faGitkraken}
+\definePIcon{python}{\faPython}
+\definePIcon{java}{\faJava}
+\definePIcon{rust}{\faRust}
+\definePIcon{c}{\faCuttlefish}
+\definePIcon{cpp}{\faCuttlefish}
+\definePIcon{cplusplus}{\faCuttlefish}
+\definePIcon{js}{\faJsSquare}
+\definePIcon{javascript}{\faJsSquare}
+\definePIcon{node}{\faNodeJs}
+\definePIcon{nodejs}{\faNodeJs}
+\definePIcon{npm}{\faNpm}
+\definePIcon{yarn}{\faYarn}
+\definePIcon{react}{\faReact}
+\definePIcon{vue}{\faVuejs}
+\definePIcon{html5}{\faHtml5}
+\definePIcon{html}{\faHtml5}
+\definePIcon{css3}{\faCss3}
+\definePIcon{css}{\faCss3}
+\definePIcon{bootstrap}{\faBootstrap}
+\definePIcon{sass}{\faSass}
+\definePIcon{less}{\faLess}
+\definePIcon{php}{\faPhp}
+\definePIcon{laravel}{\faLaravel}
+\definePIcon{swift}{\faSwift}
+\definePIcon{r}{\faRProject}
+\definePIcon{aws}{\faAws}
+\definePIcon{cloudflare}{\faCloudflare}
+\definePIcon{jenkins}{\faJenkins}
+\definePIcon{database}{\faDatabase}
+\definePIcon{server}{\faServer}
+\definePIcon{code}{\faCode}
+\definePIcon{code-branch}{\faCodeBranch}
+\definePIcon{terminal}{\faTerminal}
+\definePIcon{network}{\faNetworkWired}
+\definePIcon{cloud}{\faCloud}
+\definePIcon{microchip}{\faMicrochip}
+\definePIcon{memory}{\faMemory}
+\definePIcon{robot}{\faRobot}
+\definePIcon{cogs}{\faCogs}
+\definePIcon{cube}{\faCube}
+\definePIcon{cubes}{\faCubes}
+\definePIcon{boxes}{\faBoxes}
+\definePIcon{sitemap}{\faSitemap}
+\definePIcon{chart-line}{\faChartLine}
+\definePIcon{tasks}{\faTasks}
+\definePIcon{stream}{\faStream}
+\definePIcon{markdown}{\faMarkdown}
+\definePIcon{project}{\faProjectDiagram}
+
+% --- Misc decorative -------------------------------------------------------
+\definePIcon{star}{\faStar}
+\definePIcon{trophy}{\faTrophy}
+\definePIcon{award}{\faAward}
+\definePIcon{birthday}{\faBirthdayCake}
+\definePIcon{calendar}{\faCalendar}
+\definePIcon{tools}{\faWrench}
+\definePIcon{book}{\faBook}
+\definePIcon{lightbulb}{\faLightbulb}
+\definePIcon{quote}{\faQuoteLeft}

@@ -1,0 +1,67 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  latex:
+    name: XeLaTeX
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            make \
+            curl \
+            wget \
+            fontconfig \
+            poppler-utils \
+            ripgrep \
+            texlive-xetex \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-chinese \
+            latexmk
+
+      - name: Fetch local-use font artifacts
+        run: make fonts
+
+      - name: Build resume
+        run: make
+
+      - name: Scan LaTeX log
+        run: |
+          set +e
+          rg -n "^!|Error:|Package .* Error|LaTeX .*Warning|Package .*Warning|Overfull|Underfull|undefined|Unknown CJK|Missing character" resume.log
+          status=$?
+          set -e
+          if [ "$status" -eq 0 ]; then
+            exit 1
+          fi
+          if [ "$status" -ne 1 ]; then
+            exit "$status"
+          fi
+
+      - name: Inspect PDF
+        run: |
+          test -s resume.pdf
+          pdfinfo resume.pdf
+          pdffonts resume.pdf
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: inkumo-resume
+          path: resume.pdf

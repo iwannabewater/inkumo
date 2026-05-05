@@ -1,0 +1,32 @@
+# LaTeX build byproducts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+*.bcf
+*.run.xml
+*.bbl
+*.blg
+*.nav
+*.snm
+
+# Editor / OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Fonts — TsangerJinKai02 is free-for-personal-use only.
+# Keep them out of public commits to respect the license; users run
+# `make fonts` (fonts/fetch.sh) to retrieve them locally.
+fonts/*.ttf
+fonts/*.otf
+fonts/*.woff
+fonts/*.woff2
+
+# Rendered PDFs may embed local personal-use font subsets.
+*.pdf

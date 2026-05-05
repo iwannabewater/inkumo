@@ -1,0 +1,20 @@
+%% content/research.tex — 科研经历
+
+\Needspace{62mm}
+\inkumosection{科研经历}
+
+\Project
+  {面向云原生集群的异常感知资源预测}
+  {科研项目}
+  [第一作者]
+  {2023.09 — 2024.05}
+\Stack{Python\sep PyTorch\sep Kubernetes\sep OpenTelemetry}
+\Desc{%
+  围绕多租户集群中的资源波动与异常负载建模，构建轻量级时序预测框架，融合指标序列、
+  事件日志与拓扑信息，在实验室真实集群回放数据上实现更稳定的容量预估。%
+}
+\begin{Bullets}
+  \item 设计指标清洗与异常片段标注流程，覆盖 \hl{18} 类核心资源指标与 \hl{240+} 万条运行样本
+  \item 引入注意力窗口与拓扑邻接特征，预测误差较传统 ARIMA 基线下降 \hl{31\%}
+  \item 论文初稿投稿至系统方向会议，配套实验代码与数据处理脚本整理为可复现实验包
+\end{Bullets}

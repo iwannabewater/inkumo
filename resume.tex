@@ -1,0 +1,32 @@
+%% resume.tex — Main entry point.
+%%
+%% This is a thin orchestrator: each section lives in content/ as its own
+%% file. To re-arrange or hide sections, comment out the corresponding
+%% \input line below.
+%%
+%% Compile (XeLaTeX is mandatory):
+%%   xelatex resume.tex
+%%   xelatex resume.tex          # second pass: hyperref / TOC stability
+%%
+%% Or, with latexmk:
+%%   latexmk -xelatex resume.tex
+
+\documentclass{inkumo}
+
+%% Platform icon registry. Edit lib/icons.tex to swap any glyph.
+\input{lib/icons.tex}
+
+\begin{document}
+
+\input{content/header.tex}
+\input{content/education.tex}
+\input{content/skills.tex}
+\input{content/awards.tex}
+\input{content/research.tex}
+\input{content/projects.tex}
+\input{content/campus.tex}
+
+%% Optional terminal flourish — uncomment to add a small brand square at the end.
+% \flourish
+
+\end{document}
