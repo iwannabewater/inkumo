@@ -5,8 +5,8 @@
 %%
 %% Design tokens reproduce github.com/tw93/kami exactly.
 %% Compile: xelatex resume.tex     (XeLaTeX is mandatory — xeCJK + fontspec)
-%% Fonts:   TsangerJinKai02 (CJK, free for personal use only)
-%%          XCharter (Latin, OFL, ships with TeX Live)
+%% Fonts:   TsangerJinKai02 (CJK, free for personal non-commercial use)
+%%          XCharter (Latin, Bitstream Charter-derived, ships with TeX Live)
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{inkumo}[2026/05/05 v0.1.0 Inkumo - Kami-system resume class]
@@ -30,6 +30,8 @@
 \RequirePackage[a4paper, top=11mm, bottom=11mm, left=13mm, right=13mm]{geometry}
 \RequirePackage{xcolor}
 \RequirePackage{pagecolor}
+\RequirePackage{lastpage}
+\RequirePackage{refcount}
 \RequirePackage{fontspec}
 \RequirePackage{xeCJK}
 \RequirePackage{fontawesome5}
@@ -91,6 +93,31 @@
   pdftitle={Inkumo Resume},
   pdfcreator={Inkumo},
   pdfproducer={LaTeX with the inkumo class},
+}
+
+\newcommand{\inkumo@author}{}
+\newcommand{\inkumo@twodigits}[1]{\ifnum#1<10 0\fi\number#1}
+\newcommand{\inkumo@compiledate}{%
+  \number\year-\inkumo@twodigits{\month}-\inkumo@twodigits{\day}%
+}
+\newcommand{\inkumo@footersep}{%
+  \hspace{0.45em}{\color{kami@stone}\raisebox{0.26ex}{\rule{1.2pt}{1.2pt}}}\hspace{0.45em}%
+}
+\newcommand{\inkumo@writeicon}{{\color{kami@brandlight}\faPenNib}}
+
+\AddToHook{shipout/foreground}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=south, inner sep=0pt] at ([yshift=5mm]current page.south) {%
+      {\fontsize{8pt}{10pt}\selectfont\color{kami@stone}\tnum{\thepage/\pageref*{LastPage}}}%
+    };%
+    \ifnum\value{page}=\getpagerefnumber{LastPage}%
+      \node[anchor=south west, inner sep=0pt] at ([xshift=13mm,yshift=5mm]current page.south west) {%
+        {\fontsize{8pt}{10pt}\selectfont\color{kami@stone}%
+          Copyright \textcopyright{} \inkumo@author\inkumo@footersep
+          \inkumo@writeicon\hspace{0.28em}\inkumo@compiledate}%
+      };%
+    \fi
+  \end{tikzpicture}%
 }
 
 %% ======================================================================
@@ -213,17 +240,26 @@
 
 %% Tabular numbers — for dates, ranks, GPAs
 \newcommand{\tnum}[1]{{\addfontfeatures{Numbers={Tabular}}#1}}
+\newcommand{\inkumo@flowrow}[3]{%
+  \begin{minipage}[t]{\dimexpr\linewidth-#1-2mm\relax}\raggedright
+    #2%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{#1}\raggedleft
+    #3%
+  \end{minipage}%
+}
 
 %% ======================================================================
 %% Hairlines
-%%   \solidhairline   — 0.4pt solid in border-soft     (between projects)
+%%   \entryleadline   — full-width blue hairline before a section's first entry
 %%   \dottedhairline  — dashed leader in border        (between data rows)
 %%   \warmhairline    — 0.5pt peach (kami@headerline)  (under header only)
 %% ======================================================================
-\newcommand{\solidhairline}{%
-  \par\addvspace{1mm}%
-  {\color{kami@bordersoft}\noindent\rule{\linewidth}{0.4pt}}%
-  \par\addvspace{0.6mm}%
+\newcommand{\entryleadline}{%
+  \par\addvspace{0.25mm}%
+  {\color{kami@brandlight!36!kami@border}\noindent\rule{\linewidth}{0.4pt}}%
+  \par\addvspace{0.35mm}%
 }
 \newcommand{\dottedhairline}{%
   \par\addvspace{0.8mm}%
@@ -281,20 +317,24 @@
   \@inkumo@firstprojecttrue
   \@inkumo@firstcampustrue
   \@inkumo@firstedutrue
-  \Needspace{18mm}%
+  \Needspace{22mm}%
   \par\addvspace{4.5mm}%
   \noindent
-  \rlap{%
-    \raisebox{-2.5pt}[12pt][2.5pt]{%
-      \textcolor{kami@brand}{\rule{2.5pt}{14pt}}%
+  \IfValueTF{#2}{%
+    \inkumo@flowrow{46mm}{%
+      \raisebox{-2.5pt}[12pt][2.5pt]{\textcolor{kami@brand}{\rule{2.5pt}{14pt}}}%
+      \hspace{7pt}%
+      {\fontsize{12.5pt}{15pt}\selectfont\bfseries\color{kami@nearblack}#1}
+    }{%
+      {\fontsize{9pt}{11pt}\selectfont\color{kami@stone}#2}
     }%
+  }{%
+    \hangindent=9.5pt
+    \hangafter=1
+    \raisebox{-2.5pt}[12pt][2.5pt]{\textcolor{kami@brand}{\rule{2.5pt}{14pt}}}%
     \hspace{7pt}%
     {\fontsize{12.5pt}{15pt}\selectfont\bfseries\color{kami@nearblack}#1}%
   }%
-  \hfill
-  \IfValueTF{#2}{%
-    {\fontsize{9pt}{11pt}\selectfont\color{kami@stone}#2}%
-  }{\null}%
   \par\addvspace{2mm}%
 }
 
@@ -329,21 +369,20 @@
 %% inside it; see lib/icons.tex for the full glyph registry.
 %% ======================================================================
 \NewDocumentCommand{\inkumoheader}{m o m o o}{%
+  \gdef\inkumo@author{#1}%
+  \hypersetup{pdfauthor={#1}}%
   \par\noindent
-  \rlap{%
+  \inkumo@flowrow{54mm}{%
     {\fontsize{26pt}{28pt}\selectfont\bfseries\color{kami@nearblack}#1}%
     \IfValueT{#2}{%
       \hspace{2.6mm}%
-      \raisebox{0.7pt}{\fontsize{13pt}{16pt}\selectfont\color{kami@stone}#2}%
+      {\fontsize{13pt}{16pt}\selectfont\color{kami@stone}#2}%
+    }%
+  }{%
+    \IfValueT{#4}{%
+      {\fontsize{10.5pt}{13pt}\selectfont\bfseries\color{kami@brand}#4}%
     }%
   }%
-  \hfill
-  \IfValueT{#4}{%
-    \raisebox{1.2em}{%
-      \fontsize{10.5pt}{13pt}\selectfont\bfseries\color{kami@brand}#4%
-    }%
-  }%
-  \null
   \par\vspace{2.2mm}%
   %% Contact line
   \noindent
@@ -431,12 +470,12 @@
 %% ======================================================================
 \NewDocumentCommand{\Award}{m m m}{%
   \par\noindent
-  \rlap{%
+  \inkumo@flowrow{22mm}{%
     {\fontsize{10pt}{13pt}\selectfont\bfseries\color{kami@nearblack}#1}%
     {\fontsize{9.5pt}{13pt}\selectfont\color{kami@darkwarm}\sep #2}%
+  }{%
+    {\fontsize{9pt}{12pt}\selectfont\color{kami@stone}\tnum{#3}}%
   }%
-  \hfill
-  {\fontsize{9pt}{12pt}\selectfont\color{kami@stone}\tnum{#3}}%
   \par\addvspace{0.5mm}%
   \dottedhairline
 }
@@ -451,7 +490,7 @@
 %%   \Desc{基于 Kubernetes 的容器管理平台...}— description paragraph
 %%   \begin{Bullets}\item ... \end{Bullets} — brand-bar bullet list
 %%
-%% Each \Project draws a thin solid hairline above to separate it.
+%% The first \Project after a section draws a full-width blue hairline.
 %% (The if@inkumo@firstproject flag is declared once near \inkumosection,
 %% along with the matching campus flag; do not redeclare here.)
 %% ======================================================================
@@ -459,33 +498,33 @@
   \Needspace{46mm}%
   \par
   \if@inkumo@firstproject
-    \solidhairline
+    \entryleadline
     \@inkumo@firstprojectfalse
   \else
     \par\addvspace{1.5mm}%
     \dottedhairline
   \fi
   \noindent
-  \rlap{%
+  \inkumo@flowrow{34mm}{%
     {\fontsize{11pt}{13.5pt}\selectfont\bfseries\color{kami@nearblack}#1}%
     {\fontsize{10pt}{13.5pt}\selectfont\color{kami@olive}\sep #2}%
     \IfValueT{#3}{\hspace{2mm}\rolepill{#3}}%
+  }{%
+    {\fontsize{9pt}{12pt}\selectfont\color{kami@stone}\tnum{#4}}%
   }%
-  \hfill
-  {\fontsize{9pt}{12pt}\selectfont\color{kami@stone}\tnum{#4}}%
-  \par\vspace{0.5mm}%
+  \par\vspace{0.25mm}%
 }
 
 \newcommand{\Stack}[1]{%
   \par
   {\fontsize{9pt}{12.5pt}\selectfont\color{kami@brandlight}#1}%
-  \par\vspace{0.4mm}%
+  \par\vspace{0.25mm}%
 }
 
 \newcommand{\Desc}[1]{%
   \par
   {\fontsize{9.2pt}{13pt}\selectfont\color{kami@nearblack}#1}%
-  \par\vspace{0.4mm}%
+  \par\vspace{0.25mm}%
 }
 
 %% Brand-bar bullet list (8pt × 1.2pt brand bar marker — Kami value-anchors)
@@ -510,23 +549,23 @@
 %% (firstcampus flag is declared once near \inkumosection.)
 %% ======================================================================
 \NewDocumentCommand{\Campus}{m m m}{%
-  \Needspace{36mm}%
+  \Needspace{18mm}%
   \par
   \if@inkumo@firstcampus
-    \solidhairline
+    \entryleadline
     \@inkumo@firstcampusfalse
   \else
     \par\addvspace{1.2mm}%
     \dottedhairline
   \fi
   \noindent
-  \rlap{%
+  \inkumo@flowrow{34mm}{%
     {\fontsize{10.5pt}{13pt}\selectfont\bfseries\color{kami@nearblack}#1}%
     {\fontsize{9.5pt}{13pt}\selectfont\color{kami@olive}\sep #2}%
+  }{%
+    {\fontsize{9pt}{12pt}\selectfont\color{kami@stone}\tnum{#3}}%
   }%
-  \hfill
-  {\fontsize{9pt}{12pt}\selectfont\color{kami@stone}\tnum{#3}}%
-  \par\vspace{0.4mm}%
+  \par\vspace{0.25mm}%
 }
 
 %% ======================================================================
@@ -536,10 +575,11 @@
 \newcommand{\Quote}[1]{%
   \par\addvspace{1.5mm}%
   \noindent
-  \begin{minipage}{\linewidth}
-    \hspace{0pt}%
-    \rlap{\textcolor{kami@brand}{\rule[-3pt]{1.4pt}{14pt}}}%
-    \hspace{8pt}%
+  \begin{minipage}[t]{1.4pt}
+    \textcolor{kami@brand}{\rule[-3pt]{1.4pt}{14pt}}%
+  \end{minipage}%
+  \hspace{6.6pt}%
+  \begin{minipage}[t]{\dimexpr\linewidth-8pt\relax}\raggedright
     {\fontsize{9.2pt}{13.2pt}\selectfont\color{kami@olive}#1}%
   \end{minipage}%
   \par\addvspace{1.2mm}%

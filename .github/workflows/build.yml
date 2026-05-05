@@ -41,6 +41,9 @@ jobs:
       - name: Build resume
         run: make
 
+      - name: Validate PDF
+        run: make test
+
       - name: Scan LaTeX log
         run: |
           set +e
