@@ -19,8 +19,9 @@ visual language restrained, precise, and print-oriented.
 - Last-page signature and compile date derived from `content/header.tex`.
 - Flow-based section and entry layout: long titles wrap before colliding with
   dates or roles.
-- Expanded icon registry for contact platforms, programming languages,
-  frameworks, databases, cloud systems, and developer tools.
+- Expanded icon registry backed by Font Awesome and Devicon, covering contact
+  platforms, programming languages, frameworks, databases, cloud systems, and
+  developer tools with real logo glyphs where available.
 - Local font fetch workflow for TsangerJinKai02 without committing font files.
 - CI validation for build health, PDF metadata, embedded fonts, page numbers,
   and last-page footer metadata.
@@ -185,6 +186,7 @@ license.
 | TsangerJinKai02 W04/W05 | Chinese text | Free for personal, non-commercial use from Tsanger. Commercial usage requires a Tsanger license. |
 | XCharter | Latin text | XCharter extends Bitstream Charter; font files use the Bitstream free font license, and TeX support files use LPPL. |
 | Font Awesome 5 Free | icons | Font files use SIL OFL 1.1; the LaTeX package uses LPPL 1.3c. |
+| Devicon | technology icons | MIT licensed. Product names, logos, and brands remain the property of their respective owners. |
 
 See `NOTICE.md` for the full project-specific notice.
 
@@ -194,8 +196,8 @@ Recent changes since the previous GitHub version:
 
 - Added bottom-center page numbers and a last-page copyright footer.
 - Improved flow layout for long headings, roles, and date ranges.
-- Expanded the icon registry and added PDF validation, CI checks, and
-  license/font notices.
+- Replaced text technology badges with bundled Devicon logo glyphs and added
+  the corresponding third-party notice.
 
 See `CHANGELOG.md` for version history.
 

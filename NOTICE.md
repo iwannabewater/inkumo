@@ -28,6 +28,16 @@ files are distributed under the LaTeX Project Public License.
 Inkumo uses the `fontawesome5` LaTeX package for icons. Font Awesome 5 Free
 icons are under SIL OFL 1.1; the LaTeX package is under LPPL 1.3c.
 
+## Devicon
+
+Inkumo bundles the Devicon font at `assets/devicon/devicon.ttf` for technology
+logo glyphs. Devicon is distributed under the MIT License; the license text is
+included at `assets/devicon/LICENSE`.
+
+Product names, logos, and brands represented by Devicon remain the property of
+their respective owners. They are used only for identification in the generated
+resume.
+
 ## Local Font Artifacts
 
 The `fonts/` directory may contain local `.ttf`, `.otf`, `.woff`, or `.woff2`

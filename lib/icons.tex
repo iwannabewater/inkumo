@@ -5,26 +5,38 @@
 %%
 %%     \definePIcon{<name>}{<glyph macro>}
 %%
-%% Glyph macros come from the fontawesome5 package (default backend) — see
-%% https://ctan.org/pkg/fontawesome5 for the full list. When FontAwesome has no
-%% faithful brand glyph, use \TextPIcon{...} to make a compact text badge and
-%% bind it to a name; the rest of the resume will pick it up wherever
-%% \PIcon{<name>} is used.
+%% Glyph macros come from Font Awesome 5 and the bundled Devicon font. Devicon
+%% gives faithful technology-logo glyphs for programming languages, frameworks,
+%% databases, cloud-native tools, and editors.
 %%
 %% Sizing & color come from \PIcon — do not embed those in your mapping;
 %% just give the glyph itself.
 %%
 %% Example overrides:
-%%   \definePIcon{blog}{\faRssSquare}                % FA RSS square
-%%   \definePIcon{go}{\TextPIcon{go}}                % no FA Go glyph yet
+%%   \definePIcon{blog}{\faRssSquare}                % Font Awesome RSS square
+%%   \definePIcon{go}{\DIcon{EA3D}}                  % Devicon Go glyph
 %%   \definePIcon{xiaohongshu}{\TextPIcon{XHS}}      % compact text badge
 
 %% ----------------------------------------------------------------------
 %% Internal storage + lookup
 %% ----------------------------------------------------------------------
 \makeatletter
+\newif\ifinkumo@devicon
+\IfFileExists{./assets/devicon/devicon.ttf}{%
+  \inkumo@devicontrue
+  \newfontface\inkumoDevicon{devicon.ttf}[Path=./assets/devicon/]%
+}{%
+  \inkumo@deviconfalse
+}
 \NewDocumentCommand{\definePIcon}{m m}{%
   \expandafter\def\csname inkumo@picon@#1\endcsname{#2}%
+}
+\NewDocumentCommand{\DIcon}{m}{%
+  \ifinkumo@devicon
+    \raisebox{-0.04ex}{{\inkumoDevicon\symbol{"#1}}}%
+  \else
+    \faQuestionCircle
+  \fi
 }
 \NewDocumentCommand{\TextPIcon}{m}{%
   \tikz[baseline=(x.base)]{%
@@ -148,129 +160,142 @@
 \definePIcon{google-scholar}{\faGoogle}
 
 % --- Operating systems / dev tools ----------------------------------------
-\definePIcon{linux}{\faLinux}
-\definePIcon{ubuntu}{\faUbuntu}
-\definePIcon{centos}{\faCentos}
-\definePIcon{fedora}{\faFedora}
-\definePIcon{windows}{\faWindows}
-\definePIcon{apple}{\faApple}
-\definePIcon{macos}{\faApple}
-\definePIcon{android}{\faAndroid}
-\definePIcon{chrome}{\faChrome}
-\definePIcon{firefox}{\faFirefox}
+\definePIcon{linux}{\DIcon{EAC9}}
+\definePIcon{ubuntu}{\DIcon{EC68}}
+\definePIcon{centos}{\DIcon{E967}}
+\definePIcon{fedora}{\DIcon{E9F8}}
+\definePIcon{windows}{\DIcon{ECA8}}
+\definePIcon{apple}{\DIcon{E929}}
+\definePIcon{macos}{\DIcon{E929}}
+\definePIcon{android}{\DIcon{E90F}}
+\definePIcon{chrome}{\DIcon{E96B}}
+\definePIcon{firefox}{\DIcon{EA02}}
 \definePIcon{edge}{\faEdge}
-\definePIcon{safari}{\faSafari}
-\definePIcon{docker}{\faDocker}
-\definePIcon{git}{\faGit}
-\definePIcon{git-square}{\faGitSquare}
+\definePIcon{safari}{\DIcon{EBEA}}
+\definePIcon{docker}{\DIcon{E9C3}}
+\definePIcon{git}{\DIcon{EA2D}}
+\definePIcon{git-square}{\DIcon{EA2D}}
 \definePIcon{gitkraken}{\faGitkraken}
 \definePIcon{sourcetree}{\faSourcetree}
 \definePIcon{atlassian}{\faAtlassian}
 \definePIcon{jira}{\faJira}
 \definePIcon{confluence}{\faConfluence}
 \definePIcon{trello}{\faTrello}
-\definePIcon{python}{\faPython}
-\definePIcon{py}{\faPython}
-\definePIcon{java}{\faJava}
-\definePIcon{rust}{\faRust}
-\definePIcon{go}{\TextPIcon{go}}
-\definePIcon{golang}{\TextPIcon{go}}
-\definePIcon{typescript}{\TextPIcon{ts}}
-\definePIcon{ts}{\TextPIcon{ts}}
-\definePIcon{c}{\faCuttlefish}
-\definePIcon{cpp}{\faCuttlefish}
-\definePIcon{cplusplus}{\faCuttlefish}
-\definePIcon{csharp}{\TextPIcon{c\#}}
-\definePIcon{cs}{\TextPIcon{c\#}}
-\definePIcon{kotlin}{\TextPIcon{kt}}
-\definePIcon{scala}{\TextPIcon{sc}}
-\definePIcon{dart}{\TextPIcon{dt}}
-\definePIcon{ruby}{\TextPIcon{rb}}
-\definePIcon{rails}{\TextPIcon{rb}}
-\definePIcon{elixir}{\TextPIcon{ex}}
-\definePIcon{erlang}{\TextPIcon{erl}}
-\definePIcon{lua}{\TextPIcon{lua}}
-\definePIcon{perl}{\TextPIcon{pl}}
+\definePIcon{vscode}{\DIcon{EC8E}}
+\definePIcon{visualstudio}{\DIcon{EC87}}
+\definePIcon{vim}{\DIcon{EC83}}
+\definePIcon{neovim}{\DIcon{EB05}}
+\definePIcon{intellij}{\DIcon{EA75}}
+\definePIcon{clion}{\DIcon{E972}}
+\definePIcon{pycharm}{\DIcon{EB95}}
+\definePIcon{webstorm}{\DIcon{ECA4}}
+\definePIcon{goland}{\DIcon{EA35}}
+\definePIcon{python}{\DIcon{EB9C}}
+\definePIcon{py}{\DIcon{EB9C}}
+\definePIcon{java}{\DIcon{EA7F}}
+\definePIcon{rust}{\DIcon{EBE6}}
+\definePIcon{go}{\DIcon{EA3D}}
+\definePIcon{golang}{\DIcon{EA3D}}
+\definePIcon{typescript}{\DIcon{EC63}}
+\definePIcon{ts}{\DIcon{EC63}}
+\definePIcon{c}{\DIcon{EDAE}}
+\definePIcon{cpp}{\DIcon{E99A}}
+\definePIcon{cplusplus}{\DIcon{E99A}}
+\definePIcon{csharp}{\DIcon{E9A0}}
+\definePIcon{cs}{\DIcon{E9A0}}
+\definePIcon{kotlin}{\DIcon{EAB5}}
+\definePIcon{scala}{\DIcon{EBEF}}
+\definePIcon{dart}{\DIcon{E9AA}}
+\definePIcon{ruby}{\DIcon{EBE3}}
+\definePIcon{rails}{\DIcon{EBAB}}
+\definePIcon{elixir}{\DIcon{E9DB}}
+\definePIcon{erlang}{\DIcon{E9E6}}
+\definePIcon{lua}{\DIcon{EAD3}}
+\definePIcon{perl}{\DIcon{EB5F}}
 \definePIcon{shell}{\faTerminal}
 \definePIcon{bash}{\faTerminal}
 \definePIcon{js}{\faJsSquare}
 \definePIcon{javascript}{\faJsSquare}
-\definePIcon{node}{\faNodeJs}
-\definePIcon{nodejs}{\faNodeJs}
-\definePIcon{npm}{\faNpm}
-\definePIcon{yarn}{\faYarn}
-\definePIcon{react}{\faReact}
-\definePIcon{vue}{\faVuejs}
-\definePIcon{vuejs}{\faVuejs}
-\definePIcon{angular}{\faAngular}
-\definePIcon{svelte}{\TextPIcon{sv}}
-\definePIcon{next}{\TextPIcon{nx}}
-\definePIcon{nextjs}{\TextPIcon{nx}}
-\definePIcon{spring}{\TextPIcon{sp}}
-\definePIcon{django}{\TextPIcon{dj}}
-\definePIcon{flask}{\faFlask}
-\definePIcon{tauri}{\TextPIcon{ta}}
-\definePIcon{html5}{\faHtml5}
-\definePIcon{html}{\faHtml5}
-\definePIcon{css3}{\faCss3}
-\definePIcon{css}{\faCss3}
-\definePIcon{bootstrap}{\faBootstrap}
-\definePIcon{sass}{\faSass}
-\definePIcon{less}{\faLess}
-\definePIcon{php}{\faPhp}
-\definePIcon{laravel}{\faLaravel}
-\definePIcon{swift}{\faSwift}
-\definePIcon{r}{\faRProject}
-\definePIcon{r-project}{\faRProject}
-\definePIcon{matlab}{\TextPIcon{ml}}
-\definePIcon{julia}{\TextPIcon{jl}}
-\definePIcon{haskell}{\TextPIcon{hs}}
-\definePIcon{ocaml}{\TextPIcon{ml}}
-\definePIcon{zig}{\TextPIcon{zig}}
-\definePIcon{solidity}{\TextPIcon{sol}}
-\definePIcon{wasm}{\TextPIcon{wa}}
-\definePIcon{webassembly}{\TextPIcon{wa}}
+\definePIcon{node}{\DIcon{ED9E}}
+\definePIcon{nodejs}{\DIcon{ED9E}}
+\definePIcon{npm}{\DIcon{EDB0}}
+\definePIcon{yarn}{\DIcon{ECB8}}
+\definePIcon{react}{\DIcon{EBBC}}
+\definePIcon{vue}{\DIcon{EC96}}
+\definePIcon{vuejs}{\DIcon{EC96}}
+\definePIcon{angular}{\DIcon{E917}}
+\definePIcon{svelte}{\DIcon{EC30}}
+\definePIcon{next}{\DIcon{EB14}}
+\definePIcon{nextjs}{\DIcon{EB14}}
+\definePIcon{spring}{\DIcon{EC16}}
+\definePIcon{django}{\DIcon{E9BD}}
+\definePIcon{flask}{\DIcon{EA04}}
+\definePIcon{tauri}{\DIcon{EC3B}}
+\definePIcon{html5}{\DIcon{EA67}}
+\definePIcon{html}{\DIcon{EA67}}
+\definePIcon{css3}{\DIcon{E9A1}}
+\definePIcon{css}{\DIcon{E9A1}}
+\definePIcon{bootstrap}{\DIcon{E950}}
+\definePIcon{sass}{\DIcon{EBEE}}
+\definePIcon{less}{\DIcon{EAC6}}
+\definePIcon{tailwind}{\DIcon{EC39}}
+\definePIcon{tailwindcss}{\DIcon{EC39}}
+\definePIcon{php}{\DIcon{EB68}}
+\definePIcon{laravel}{\DIcon{EAC3}}
+\definePIcon{swift}{\DIcon{EC34}}
+\definePIcon{r}{\DIcon{EBDB}}
+\definePIcon{r-project}{\DIcon{EBDB}}
+\definePIcon{matlab}{\DIcon{EADF}}
+\definePIcon{julia}{\DIcon{EA97}}
+\definePIcon{haskell}{\DIcon{EA58}}
+\definePIcon{ocaml}{\DIcon{EB3C}}
+\definePIcon{zig}{\DIcon{ECC3}}
+\definePIcon{solidity}{\DIcon{EC0B}}
+\definePIcon{wasm}{\DIcon{EC9D}}
+\definePIcon{webassembly}{\DIcon{EC9D}}
 \definePIcon{aws}{\faAws}
-\definePIcon{azure}{\faMicrosoft}
-\definePIcon{gcp}{\faGoogle}
-\definePIcon{google-cloud}{\faGoogle}
+\definePIcon{azure}{\DIcon{E93A}}
+\definePIcon{gcp}{\DIcon{EA38}}
+\definePIcon{google-cloud}{\DIcon{EA38}}
 \definePIcon{digitalocean}{\faDigitalOcean}
 \definePIcon{digital-ocean}{\faDigitalOcean}
-\definePIcon{cloudflare}{\faCloudflare}
-\definePIcon{jenkins}{\faJenkins}
-\definePIcon{redhat}{\faRedhat}
-\definePIcon{kubernetes}{\TextPIcon{k8s}}
-\definePIcon{k8s}{\TextPIcon{k8s}}
-\definePIcon{helm}{\TextPIcon{helm}}
-\definePIcon{terraform}{\TextPIcon{tf}}
-\definePIcon{ansible}{\TextPIcon{ans}}
-\definePIcon{nginx}{\TextPIcon{nx}}
-\definePIcon{prometheus}{\TextPIcon{pr}}
-\definePIcon{grafana}{\TextPIcon{gf}}
-\definePIcon{opentelemetry}{\TextPIcon{otel}}
-\definePIcon{otel}{\TextPIcon{otel}}
-\definePIcon{loki}{\TextPIcon{loki}}
+\definePIcon{cloudflare}{\DIcon{E976}}
+\definePIcon{jenkins}{\DIcon{EA87}}
+\definePIcon{redhat}{\DIcon{EBC6}}
+\definePIcon{kubernetes}{\DIcon{EABD}}
+\definePIcon{k8s}{\DIcon{EABD}}
+\definePIcon{helm}{\DIcon{EA5C}}
+\definePIcon{terraform}{\DIcon{EC41}}
+\definePIcon{ansible}{\DIcon{E918}}
+\definePIcon{nginx}{\DIcon{EB15}}
+\definePIcon{prometheus}{\DIcon{EB87}}
+\definePIcon{grafana}{\DIcon{EA42}}
+\definePIcon{opentelemetry}{\DIcon{EB4F}}
+\definePIcon{otel}{\DIcon{EB4F}}
+\definePIcon{loki}{\faChartLine}
 \definePIcon{operator}{\faCogs}
 \definePIcon{operator-sdk}{\faCogs}
 \definePIcon{database}{\faDatabase}
 \definePIcon{sql}{\faDatabase}
-\definePIcon{postgres}{\TextPIcon{pg}}
-\definePIcon{postgresql}{\TextPIcon{pg}}
-\definePIcon{mysql}{\TextPIcon{my}}
-\definePIcon{sqlite}{\TextPIcon{sql}}
-\definePIcon{redis}{\TextPIcon{rds}}
-\definePIcon{mongodb}{\TextPIcon{mdb}}
-\definePIcon{mongo}{\TextPIcon{mdb}}
-\definePIcon{clickhouse}{\TextPIcon{ch}}
-\definePIcon{kafka}{\TextPIcon{kf}}
-\definePIcon{rabbitmq}{\TextPIcon{mq}}
-\definePIcon{etcd}{\TextPIcon{etcd}}
-\definePIcon{raft}{\TextPIcon{raft}}
-\definePIcon{grpc}{\TextPIcon{grpc}}
-\definePIcon{pytorch}{\TextPIcon{pt}}
-\definePIcon{tensorflow}{\TextPIcon{tf}}
-\definePIcon{cuda}{\TextPIcon{cu}}
-\definePIcon{codemirror}{\TextPIcon{cm}}
+\definePIcon{postgres}{\DIcon{EB79}}
+\definePIcon{postgresql}{\DIcon{EB79}}
+\definePIcon{mysql}{\DIcon{EAFE}}
+\definePIcon{sqlite}{\DIcon{EC1E}}
+\definePIcon{redis}{\DIcon{EBC8}}
+\definePIcon{mongodb}{\DIcon{EAF5}}
+\definePIcon{mongo}{\DIcon{EAF5}}
+\definePIcon{clickhouse}{\DIcon{ED73}}
+\definePIcon{kafka}{\DIcon{E91E}}
+\definePIcon{apachekafka}{\DIcon{E91E}}
+\definePIcon{rabbitmq}{\DIcon{EBA9}}
+\definePIcon{etcd}{\faDatabase}
+\definePIcon{raft}{\faProjectDiagram}
+\definePIcon{grpc}{\DIcon{EA48}}
+\definePIcon{openapi}{\DIcon{EB44}}
+\definePIcon{pytorch}{\DIcon{EB9E}}
+\definePIcon{tensorflow}{\DIcon{EC3F}}
+\definePIcon{cuda}{\faMicrochip}
+\definePIcon{codemirror}{\faCode}
 \definePIcon{server}{\faServer}
 \definePIcon{code}{\faCode}
 \definePIcon{code-branch}{\faCodeBranch}
@@ -288,7 +313,7 @@
 \definePIcon{chart-line}{\faChartLine}
 \definePIcon{tasks}{\faTasks}
 \definePIcon{stream}{\faStream}
-\definePIcon{markdown}{\faMarkdown}
+\definePIcon{markdown}{\DIcon{EADB}}
 \definePIcon{project}{\faProjectDiagram}
 
 % --- Misc decorative -------------------------------------------------------
