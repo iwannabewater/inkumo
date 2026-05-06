@@ -19,6 +19,8 @@ visual language restrained, precise, and print-oriented.
 - Last-page signature and compile date derived from `content/header.tex`.
 - Flow-based section and entry layout: long titles wrap before colliding with
   dates or roles.
+- Expanded icon registry for contact platforms, programming languages,
+  frameworks, databases, cloud systems, and developer tools.
 - Local font fetch workflow for TsangerJinKai02 without committing font files.
 - CI validation for build health, PDF metadata, embedded fonts, page numbers,
   and last-page footer metadata.
@@ -125,7 +127,7 @@ Common macros:
 \inkumosection{项目经历}
 
 \Project{轻量级容器云平台}{实验室项目}[方向主导]{2022.03 — 2022.12}
-\Stack{Go\sep Kubernetes\sep Prometheus\sep React}
+\Stack{\Tech{go}{Go}\sep \Tech{kubernetes}{Kubernetes}\sep \Tech{prometheus}{Prometheus}\sep \Tech{react}{React}}
 \Desc{面向高校实验室场景的容器编排平台。}
 \begin{Bullets}
   \item 设计并实现多租户权限模型，资源申请时延缩短到分钟级
@@ -192,7 +194,8 @@ Recent changes since the previous GitHub version:
 
 - Added bottom-center page numbers and a last-page copyright footer.
 - Improved flow layout for long headings, roles, and date ranges.
-- Added PDF validation, CI checks, and license/font notices.
+- Expanded the icon registry and added PDF validation, CI checks, and
+  license/font notices.
 
 See `CHANGELOG.md` for version history.
 

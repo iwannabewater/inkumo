@@ -6,18 +6,18 @@
 %%     \definePIcon{<name>}{<glyph macro>}
 %%
 %% Glyph macros come from the fontawesome5 package (default backend) — see
-%% https://ctan.org/pkg/fontawesome5 for the full list. You can also define
-%% your own custom glyph (e.g. inline TeX, an image, an SVG) and bind it to a
-%% name; the rest of the resume will pick it up wherever \PIcon{<name>} is
-%% used.
+%% https://ctan.org/pkg/fontawesome5 for the full list. When FontAwesome has no
+%% faithful brand glyph, use \TextPIcon{...} to make a compact text badge and
+%% bind it to a name; the rest of the resume will pick it up wherever
+%% \PIcon{<name>} is used.
 %%
 %% Sizing & color come from \PIcon — do not embed those in your mapping;
 %% just give the glyph itself.
 %%
 %% Example overrides:
-%%   \definePIcon{wechat}{\textbf{\textsc{wx}}}      % literal text
 %%   \definePIcon{blog}{\faRssSquare}                % FA RSS square
-%%   \definePIcon{xiaohongshu}{\textbf{XHS}}         % no FA glyph yet — use text
+%%   \definePIcon{go}{\TextPIcon{go}}                % no FA Go glyph yet
+%%   \definePIcon{xiaohongshu}{\TextPIcon{XHS}}      % compact text badge
 
 %% ----------------------------------------------------------------------
 %% Internal storage + lookup
@@ -25,6 +25,21 @@
 \makeatletter
 \NewDocumentCommand{\definePIcon}{m m}{%
   \expandafter\def\csname inkumo@picon@#1\endcsname{#2}%
+}
+\NewDocumentCommand{\TextPIcon}{m}{%
+  \tikz[baseline=(x.base)]{%
+    \node[
+      fill=kami@brandtint,
+      draw=kami@brandlight!18!kami@border,
+      line width=0.2pt,
+      rounded corners=0.8pt,
+      inner xsep=1.45pt,
+      inner ysep=0.4pt,
+      text=kami@brand,
+      font={\fontsize{5.4pt}{5.4pt}\selectfont\bfseries},
+      outer sep=0pt,
+    ] (x) {#1};%
+  }%
 }
 \NewDocumentCommand{\PIcon}{m}{%
   \begingroup
@@ -103,11 +118,11 @@
 \definePIcon{wechat}{\faWeixin}
 \definePIcon{weixin}{\faWeixin}
 \definePIcon{qq}{\faQq}
-\definePIcon{zhihu}{{\fontsize{8pt}{8pt}\selectfont\bfseries 知}}
-\definePIcon{bilibili}{{\fontsize{8pt}{8pt}\selectfont\bfseries B}}
-\definePIcon{douyin}{{\fontsize{8pt}{8pt}\selectfont\bfseries 抖}}
-\definePIcon{xiaohongshu}{{\fontsize{8pt}{8pt}\selectfont\bfseries 小}}
-\definePIcon{juejin}{{\fontsize{8pt}{8pt}\selectfont\bfseries 掘}}
+\definePIcon{zhihu}{\TextPIcon{知}}
+\definePIcon{bilibili}{\TextPIcon{B}}
+\definePIcon{douyin}{\TextPIcon{抖}}
+\definePIcon{xiaohongshu}{\TextPIcon{小}}
+\definePIcon{juejin}{\TextPIcon{掘}}
 
 % --- Web / blog ------------------------------------------------------------
 \definePIcon{globe}{\faGlobe}
@@ -149,12 +164,35 @@
 \definePIcon{git}{\faGit}
 \definePIcon{git-square}{\faGitSquare}
 \definePIcon{gitkraken}{\faGitkraken}
+\definePIcon{sourcetree}{\faSourcetree}
+\definePIcon{atlassian}{\faAtlassian}
+\definePIcon{jira}{\faJira}
+\definePIcon{confluence}{\faConfluence}
+\definePIcon{trello}{\faTrello}
 \definePIcon{python}{\faPython}
+\definePIcon{py}{\faPython}
 \definePIcon{java}{\faJava}
 \definePIcon{rust}{\faRust}
+\definePIcon{go}{\TextPIcon{go}}
+\definePIcon{golang}{\TextPIcon{go}}
+\definePIcon{typescript}{\TextPIcon{ts}}
+\definePIcon{ts}{\TextPIcon{ts}}
 \definePIcon{c}{\faCuttlefish}
 \definePIcon{cpp}{\faCuttlefish}
 \definePIcon{cplusplus}{\faCuttlefish}
+\definePIcon{csharp}{\TextPIcon{c\#}}
+\definePIcon{cs}{\TextPIcon{c\#}}
+\definePIcon{kotlin}{\TextPIcon{kt}}
+\definePIcon{scala}{\TextPIcon{sc}}
+\definePIcon{dart}{\TextPIcon{dt}}
+\definePIcon{ruby}{\TextPIcon{rb}}
+\definePIcon{rails}{\TextPIcon{rb}}
+\definePIcon{elixir}{\TextPIcon{ex}}
+\definePIcon{erlang}{\TextPIcon{erl}}
+\definePIcon{lua}{\TextPIcon{lua}}
+\definePIcon{perl}{\TextPIcon{pl}}
+\definePIcon{shell}{\faTerminal}
+\definePIcon{bash}{\faTerminal}
 \definePIcon{js}{\faJsSquare}
 \definePIcon{javascript}{\faJsSquare}
 \definePIcon{node}{\faNodeJs}
@@ -163,6 +201,15 @@
 \definePIcon{yarn}{\faYarn}
 \definePIcon{react}{\faReact}
 \definePIcon{vue}{\faVuejs}
+\definePIcon{vuejs}{\faVuejs}
+\definePIcon{angular}{\faAngular}
+\definePIcon{svelte}{\TextPIcon{sv}}
+\definePIcon{next}{\TextPIcon{nx}}
+\definePIcon{nextjs}{\TextPIcon{nx}}
+\definePIcon{spring}{\TextPIcon{sp}}
+\definePIcon{django}{\TextPIcon{dj}}
+\definePIcon{flask}{\faFlask}
+\definePIcon{tauri}{\TextPIcon{ta}}
 \definePIcon{html5}{\faHtml5}
 \definePIcon{html}{\faHtml5}
 \definePIcon{css3}{\faCss3}
@@ -174,10 +221,56 @@
 \definePIcon{laravel}{\faLaravel}
 \definePIcon{swift}{\faSwift}
 \definePIcon{r}{\faRProject}
+\definePIcon{r-project}{\faRProject}
+\definePIcon{matlab}{\TextPIcon{ml}}
+\definePIcon{julia}{\TextPIcon{jl}}
+\definePIcon{haskell}{\TextPIcon{hs}}
+\definePIcon{ocaml}{\TextPIcon{ml}}
+\definePIcon{zig}{\TextPIcon{zig}}
+\definePIcon{solidity}{\TextPIcon{sol}}
+\definePIcon{wasm}{\TextPIcon{wa}}
+\definePIcon{webassembly}{\TextPIcon{wa}}
 \definePIcon{aws}{\faAws}
+\definePIcon{azure}{\faMicrosoft}
+\definePIcon{gcp}{\faGoogle}
+\definePIcon{google-cloud}{\faGoogle}
+\definePIcon{digitalocean}{\faDigitalOcean}
+\definePIcon{digital-ocean}{\faDigitalOcean}
 \definePIcon{cloudflare}{\faCloudflare}
 \definePIcon{jenkins}{\faJenkins}
+\definePIcon{redhat}{\faRedhat}
+\definePIcon{kubernetes}{\TextPIcon{k8s}}
+\definePIcon{k8s}{\TextPIcon{k8s}}
+\definePIcon{helm}{\TextPIcon{helm}}
+\definePIcon{terraform}{\TextPIcon{tf}}
+\definePIcon{ansible}{\TextPIcon{ans}}
+\definePIcon{nginx}{\TextPIcon{nx}}
+\definePIcon{prometheus}{\TextPIcon{pr}}
+\definePIcon{grafana}{\TextPIcon{gf}}
+\definePIcon{opentelemetry}{\TextPIcon{otel}}
+\definePIcon{otel}{\TextPIcon{otel}}
+\definePIcon{loki}{\TextPIcon{loki}}
+\definePIcon{operator}{\faCogs}
+\definePIcon{operator-sdk}{\faCogs}
 \definePIcon{database}{\faDatabase}
+\definePIcon{sql}{\faDatabase}
+\definePIcon{postgres}{\TextPIcon{pg}}
+\definePIcon{postgresql}{\TextPIcon{pg}}
+\definePIcon{mysql}{\TextPIcon{my}}
+\definePIcon{sqlite}{\TextPIcon{sql}}
+\definePIcon{redis}{\TextPIcon{rds}}
+\definePIcon{mongodb}{\TextPIcon{mdb}}
+\definePIcon{mongo}{\TextPIcon{mdb}}
+\definePIcon{clickhouse}{\TextPIcon{ch}}
+\definePIcon{kafka}{\TextPIcon{kf}}
+\definePIcon{rabbitmq}{\TextPIcon{mq}}
+\definePIcon{etcd}{\TextPIcon{etcd}}
+\definePIcon{raft}{\TextPIcon{raft}}
+\definePIcon{grpc}{\TextPIcon{grpc}}
+\definePIcon{pytorch}{\TextPIcon{pt}}
+\definePIcon{tensorflow}{\TextPIcon{tf}}
+\definePIcon{cuda}{\TextPIcon{cu}}
+\definePIcon{codemirror}{\TextPIcon{cm}}
 \definePIcon{server}{\faServer}
 \definePIcon{code}{\faCode}
 \definePIcon{code-branch}{\faCodeBranch}

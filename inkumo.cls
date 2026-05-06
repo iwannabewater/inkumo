@@ -347,8 +347,10 @@
   \tikz[baseline=(t.base)]{%
     \node[
       fill=kami@brandtint,
+      draw=kami@brandlight!28!kami@border,
+      line width=0.25pt,
       rounded corners=1.6pt,
-      inner xsep=4pt, inner ysep=1.4pt,
+      inner xsep=4.2pt, inner ysep=1.25pt,
       text=kami@brand,
       font={\fontsize{8.5pt}{10pt}\selectfont\bfseries},
       outer sep=0pt,

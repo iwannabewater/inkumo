@@ -8,6 +8,8 @@ All notable changes to Inkumo are recorded here.
   from `content/header.tex`.
 - Reworked section and entry rows to support wrapping, pagination, and long
   date or role fields without overlap.
+- Expanded the icon registry for programming languages, infrastructure, data
+  systems, and developer tools.
 - Added PDF validation, CI checks, and license/font notices for public use.
 
 ## 0.1.0 - 2026-05-05
