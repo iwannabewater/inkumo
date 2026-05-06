@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fonts/fetch.sh — download TsangerJinKai02 into ./fonts/.
+# scripts/fetch-fonts.sh - download TsangerJinKai02 into ./fonts/.
 #
 # TsangerJinKai02 is free for personal use only (https://tsanger.cn).
 # We mirror through the Kami project's CDN, falling back across mirrors and
@@ -7,12 +7,12 @@
 # script is idempotent: if both fonts exist and look
 # intact, it exits without re-downloading.
 #
-# Usage:  bash fonts/fetch.sh
+# Usage: bash scripts/fetch-fonts.sh
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FONT_DIR="$SCRIPT_DIR"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+FONT_DIR="$ROOT_DIR/fonts"
 MIN_SIZE_BYTES=8000000   # ~8 MB; smaller means a truncated download
 
 declare -A FONTS=(

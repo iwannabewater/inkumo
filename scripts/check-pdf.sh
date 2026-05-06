@@ -19,6 +19,7 @@ require_command() {
 }
 
 require_command pdfinfo
+require_command pdffonts
 require_command pdftotext
 require_command python3
 require_command rg
@@ -26,9 +27,20 @@ require_command rg
 [[ -s "$PDF" ]] || fail "resume.pdf is missing or empty"
 [[ -s "$LOG" ]] || fail "resume.log is missing or empty"
 
+for asset in \
+  "$ROOT_DIR/assets/devicon/devicon.ttf" \
+  "$ROOT_DIR/assets/simple-icons/SimpleIcons.ttf"; do
+  [[ -s "$asset" ]] || fail "missing icon asset: ${asset#$ROOT_DIR/} (run: make setup)"
+done
+
 if rg -n "^!|Error:|Package .* Error|LaTeX .*Warning|Package .*Warning|Overfull|Underfull|undefined|Unknown CJK|Missing character" "$LOG"; then
   fail "LaTeX log contains warnings or layout issues"
 fi
+
+pdffonts "$PDF" | rg -q "devicon" \
+  || fail "Devicon font is not embedded; run make setup and rebuild"
+pdffonts "$PDF" | rg -q "SimpleIcons" \
+  || fail "Simple Icons font is not embedded; run make setup and rebuild"
 
 pages="$(pdfinfo "$PDF" | awk '/^Pages:/ {print $2}')"
 [[ -n "$pages" ]] || fail "could not read page count"
@@ -80,5 +92,21 @@ PY
 if rg -n "\\\\rlap" "$ROOT_DIR/inkumo.cls"; then
   fail "flow layout should not use zero-width rlapped headings"
 fi
+
+python3 - "$ROOT_DIR" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+content = "\n".join(path.read_text(encoding="utf-8") for path in (root / "content").glob("*.tex"))
+icons = (root / "lib" / "icons.tex").read_text(encoding="utf-8")
+
+used = set(re.findall(r"\\Tech\{([^{}]+)\}", content))
+defined = set(re.findall(r"\\definePIcon\{([^{}]+)\}", icons))
+missing = sorted(used - defined)
+if missing:
+    raise SystemExit("FAIL: missing icon mappings for \\Tech keys: " + ", ".join(missing))
+PY
 
 echo "OK: resume.pdf passed structural PDF checks"

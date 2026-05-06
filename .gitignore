@@ -22,11 +22,19 @@ Thumbs.db
 
 # Fonts — TsangerJinKai02 is free-for-personal-use only.
 # Keep them out of public commits to respect the license; users run
-# `make fonts` (fonts/fetch.sh) to retrieve them locally.
+# `make setup` to retrieve them locally.
 fonts/*.ttf
 fonts/*.otf
 fonts/*.woff
 fonts/*.woff2
+
+# Downloaded icon fonts. Users run `make setup` to retrieve them locally.
+assets/devicon/devicon.ttf
+assets/devicon/LICENSE
+assets/simple-icons/SimpleIcons.ttf
+assets/simple-icons/simple-icons.json
+assets/simple-icons/LICENSE.md
+assets/simple-icons/DISCLAIMER.md
 
 # Rendered PDFs may embed local personal-use font subsets.
 *.pdf

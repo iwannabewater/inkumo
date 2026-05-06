@@ -424,7 +424,7 @@
 
 %% ======================================================================
 %% Education
-%%   \Edu{2020.09 — 2024.06}{某某大学}{某某学院\sep 某某专业}{GPA 3.9 / 4.0\sep Rank 1\%}
+%%   \Edu{2020.09 — 2024.06}{Tsinghua University}{Department of Computer Science and Technology\sep PhD}{Research: Multimodal LLMs}
 %%
 %% Stacked dates can be passed by inserting \\ inside #1.
 %% ======================================================================

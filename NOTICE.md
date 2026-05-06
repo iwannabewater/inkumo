@@ -30,19 +30,32 @@ icons are under SIL OFL 1.1; the LaTeX package is under LPPL 1.3c.
 
 ## Devicon
 
-Inkumo bundles the Devicon font at `assets/devicon/devicon.ttf` for technology
-logo glyphs. Devicon is distributed under the MIT License; the license text is
-included at `assets/devicon/LICENSE`.
+Inkumo can download the Devicon font to `assets/devicon/devicon.ttf` for
+technology logo glyphs. Devicon is distributed under the MIT License; `make
+setup` downloads the license text to `assets/devicon/LICENSE`.
 
 Product names, logos, and brands represented by Devicon remain the property of
 their respective owners. They are used only for identification in the generated
 resume.
 
+## Simple Icons
+
+Inkumo can download the Simple Icons font package to `assets/simple-icons/` for
+brand glyphs not covered by Devicon, including etcd, CodeMirror, and
+NVIDIA / CUDA.
+The Simple Icons package is distributed under CC0-1.0; `make setup` downloads
+the package license, disclaimer, and metadata alongside the local font file.
+
+Individual brand names and marks may have trademark or usage restrictions even
+when the icon package itself is permissively licensed. Check the downloaded
+`assets/simple-icons/simple-icons.json` metadata and each brand's own policy
+before publishing commercial materials.
+
 ## Local Font Artifacts
 
-The `fonts/` directory may contain local `.ttf`, `.otf`, `.woff`, or `.woff2`
-files after running `make fonts` or installing custom fonts. These files are
-ignored by Git.
+The `fonts/` and `assets/` directories may contain local `.ttf`, `.otf`,
+`.woff`, `.woff2`, or metadata files after running `make setup`. These files
+are ignored by Git.
 
 Before publishing a fork, release, artifact, or generated PDF, verify the
 license terms for every embedded or bundled font.

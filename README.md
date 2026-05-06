@@ -2,44 +2,60 @@
 
 [![Build](https://github.com/iwannabewater/inkumo/actions/workflows/build.yml/badge.svg)](https://github.com/iwannabewater/inkumo/actions/workflows/build.yml)
 
-Inkumo is a XeLaTeX resume template for Chinese/English technical resumes. It
-uses a warm parchment canvas, restrained ink-blue accents, CJK-first spacing,
-and a serif-led type stack built around TsangerJinKai02 and XCharter.
+Inkumo is a XeLaTeX resume template for Chinese/English technical resumes,
+especially for CS students. It uses a parchment page, ink-blue accents,
+TsangerJinKai02 for Chinese, and XCharter for Latin text.
 
-Inkumo means `墨云`: `Ink` carries the printed texture of the page; `umo` echoes
-Japanese `雲 / くも` and the lightness of cloud systems. The template keeps the
-visual language restrained, precise, and print-oriented.
+`Inkumo` means `墨云`: ink on paper, cloud in motion. The name fits a technical
+resume that should stay clear, restrained, and print-ready.
+
+## Changelog
+
+Current update:
+
+- Removed the image-backed Raft icon path.
+- Moved shell scripts into `scripts/`.
+- Reworked the sample resume for large language model and multimodal research.
+- Simplified the README around one reproducible Quick Start path.
+- Replaced raw Devicon and Simple Icons codepoints in the public icon registry
+  with named glyph macros.
+
+See `CHANGELOG.md` for the full project history.
+
+## Quick Start
+
+```bash
+git clone https://github.com/iwannabewater/inkumo.git
+cd inkumo
+make setup
+make test
+```
+
+`make setup` downloads local fonts and icon fonts. `make test` builds
+`resume.pdf` and validates the output.
 
 ## Features
 
-- XeLaTeX-only class with explicit engine checks.
-- Modular content files under `content/` for education, skills, awards,
-  research, projects, and campus experience.
-- Automatic page numbers at the bottom center of every page.
-- Last-page signature and compile date derived from `content/header.tex`.
-- Flow-based section and entry layout: long titles wrap before colliding with
-  dates or roles.
-- Expanded icon registry backed by Font Awesome and Devicon, covering contact
-  platforms, programming languages, frameworks, databases, cloud systems, and
-  developer tools with real logo glyphs where available.
-- Local font fetch workflow for TsangerJinKai02 without committing font files.
-- CI validation for build health, PDF metadata, embedded fonts, page numbers,
-  and last-page footer metadata.
+- XeLaTeX document class with explicit engine checks.
+- Modular resume content under `content/`.
+- Automatic page markers and last-page copyright footer.
+- Flow-based section layout for long titles, dates, roles, and lists.
+- Font-icon registry backed by Font Awesome, Devicon, and Simple Icons.
+- CI build that checks the PDF, log, embedded fonts, page markers, footer, and
+  icon mappings.
 
 ## Requirements
 
-Inkumo requires XeLaTeX. The Makefile assumes a POSIX shell.
-
-| Tool | Required for |
+| Tool | Purpose |
 |---|---|
-| `make` | build orchestration |
+| `make` | build entry point |
 | `xelatex` | PDF rendering |
+| `curl` or `wget` | asset downloads |
+| `tar` | Simple Icons package extraction |
+| `python3` | metadata checks |
+| `pdfinfo`, `pdffonts`, `pdftotext` | PDF validation |
+| `rg` | source and log validation |
 | `latexmk` | optional live rebuilds |
-| `curl` or `wget` | downloading TsangerJinKai02 |
-| `fontconfig` | system font discovery on Linux |
-| `pdfinfo`, `pdffonts`, `pdftotext` | PDF inspection and `make test` |
-| `rg` | source checks |
-| `python3` | PDF metadata checks |
 
 ### Debian / Ubuntu
 
@@ -49,6 +65,8 @@ sudo apt install -y \
   make \
   curl \
   wget \
+  tar \
+  python3 \
   fontconfig \
   poppler-utils \
   ripgrep \
@@ -68,139 +86,101 @@ brew install --cask mactex-no-gui
 brew install poppler ripgrep
 ```
 
-Restart the shell after installing MacTeX so TeX binaries are on `PATH`.
+Restart the shell after installing MacTeX.
 
 ### Windows
 
-Use TeX Live or MiKTeX with XeLaTeX, then run the project from WSL, Git Bash, or
-another shell that provides `make`. Install Poppler and ripgrep if you want
-`make test` to run locally.
+Use WSL and follow the Debian / Ubuntu commands.
 
-## Quick Start
+## Commands
 
-```bash
-git clone https://github.com/iwannabewater/inkumo.git
-cd inkumo
-make fonts
-make
-make test
-```
+| Command | Description |
+|---|---|
+| `make setup` | Download local fonts and icon fonts |
+| `make test` | Build and validate `resume.pdf` |
+| `make watch` | Rebuild on file changes with `latexmk` |
+| `make clean` | Remove LaTeX byproducts |
+| `make distclean` | Run `make clean` and remove `resume.pdf` |
 
-The generated file is `resume.pdf`.
+## Repository Layout
 
-`resume.pdf` is intentionally ignored by Git. Generated PDFs may contain local
-font subsets, and TsangerJinKai02 is not licensed for redistribution through
-this repository.
+| Path | Purpose |
+|---|---|
+| `resume.tex` | document entry point |
+| `inkumo.cls` | layout, typography, PDF metadata |
+| `content/` | resume sections |
+| `lib/icons.tex` | icon registry |
+| `scripts/fetch-fonts.sh` | TsangerJinKai02 download script |
+| `scripts/fetch-icons.sh` | Devicon and Simple Icons download script |
+| `scripts/check-pdf.sh` | PDF validation script |
+| `fonts/` | ignored local CJK font files |
+| `assets/` | ignored local icon font files and tracked source notes |
 
 ## Editing
 
-The entry point is `resume.tex`. It only loads the icon registry and content
-sections:
+Update the files under `content/` first:
 
-```latex
-\input{lib/icons.tex}
-\input{content/header.tex}
-\input{content/education.tex}
-\input{content/skills.tex}
-\input{content/awards.tex}
-\input{content/research.tex}
-\input{content/projects.tex}
-\input{content/campus.tex}
-```
-
-Edit these files first:
-
-| File | Purpose |
+| File | Content |
 |---|---|
-| `content/header.tex` | name, alias, contact line, role, summary |
-| `content/education.tex` | education history |
-| `content/skills.tex` | skill tiers |
-| `content/awards.tex` | awards and rankings |
+| `content/header.tex` | name, contact line, role, summary |
+| `content/education.tex` | education |
+| `content/skills.tex` | skill rows |
+| `content/awards.tex` | awards |
 | `content/research.tex` | research entries |
 | `content/projects.tex` | project entries |
-| `content/campus.tex` | campus or extracurricular entries |
-| `lib/icons.tex` | contact and technology icon mappings |
-| `inkumo.cls` | visual system, macros, spacing, page metadata |
+| `content/campus.tex` | campus experience |
 
 Common macros:
 
 ```latex
-\inkumosection{项目经历}
+\inkumosection{Selected Projects}
 
-\Project{轻量级容器云平台}{实验室项目}[方向主导]{2022.03 — 2022.12}
-\Stack{\Tech{go}{Go}\sep \Tech{kubernetes}{Kubernetes}\sep \Tech{prometheus}{Prometheus}\sep \Tech{react}{React}}
-\Desc{面向高校实验室场景的容器编排平台。}
+\Project
+  {Multimodal Evaluation Platform}
+  {Lab Project}
+  [Technical Lead]
+  {2023.11 -- 2024.04}
+\Stack{\Tech{python}{Python}\sep \Tech{pytorch}{PyTorch}\sep \Tech{react}{React}}
+\Desc{Built an evaluation workflow for vision-language models.}
 \begin{Bullets}
-  \item 设计并实现多租户权限模型，资源申请时延缩短到分钟级
+  \item Added task schemas, metric aggregation, and searchable error cases
 \end{Bullets}
-
-\Award{ACM-ICPC 区域赛}{铜奖}{2021.12}
 ```
 
-## Layout Model
+## Icons
 
-Inkumo does not position resume content with absolute coordinates. Sections and
-entries participate in the normal TeX page flow, so content can grow, wrap, and
-paginate naturally.
+Inkumo uses font-based icons only.
 
-The class uses `\Needspace` only as a pagination guard: it prevents a section
-title or entry header from being stranded at the bottom of a page. The footer is
-drawn as a page overlay, so page numbers and the final signature do not consume
-body text height.
-
-Entry headers use bounded left/right regions. Long project names, award names,
-roles, and dates wrap within those regions instead of overlapping.
-
-## Build Commands
-
-```bash
-make          # build resume.pdf with two XeLaTeX passes
-make fonts    # fetch TsangerJinKai02 W04/W05 into fonts/
-make test     # build and validate resume.pdf
-make watch    # live rebuild with latexmk
-make clean    # remove LaTeX byproducts
-make distclean
-```
-
-`make test` validates that:
-
-- Every page contains a page marker matching the final page count.
-- The copyright signature appears only on the last page.
-- The last-page signature uses the name from `content/header.tex`.
-
-## Continuous Integration
-
-`.github/workflows/build.yml` runs on pushes, pull requests, and manual
-dispatches. The workflow installs TeX Live, fetches local-use font artifacts,
-builds the resume, runs the validation suite, and uploads the generated PDF as a
-workflow artifact.
-
-## Fonts and Licensing
-
-Inkumo's source code and documentation are MIT licensed. Font files and
-generated PDFs are governed by their own licenses and are not covered by the MIT
-license.
-
-| Asset | Role | License / notice |
+| Source | Local artifact | Usage |
 |---|---|---|
-| TsangerJinKai02 W04/W05 | Chinese text | Free for personal, non-commercial use from Tsanger. Commercial usage requires a Tsanger license. |
-| XCharter | Latin text | XCharter extends Bitstream Charter; font files use the Bitstream free font license, and TeX support files use LPPL. |
-| Font Awesome 5 Free | icons | Font files use SIL OFL 1.1; the LaTeX package uses LPPL 1.3c. |
-| Devicon | technology icons | MIT licensed. Product names, logos, and brands remain the property of their respective owners. |
+| Font Awesome 5 Free | TeX Live package | contact and generic icons |
+| Devicon | `assets/devicon/devicon.ttf` | programming languages and developer tools |
+| Simple Icons | `assets/simple-icons/SimpleIcons.ttf` | etcd, CodeMirror, NVIDIA / CUDA |
 
-See `NOTICE.md` for the full project-specific notice.
+The public registry uses named glyphs:
 
-## Changelog
+```latex
+\definePIcon{blog}{\faRssSquare}
+\definePIcon{go}{\DeviconGo}
+\definePIcon{etcd}{\SimpleIconEtcd}
+\definePIcon{cuda}{\SimpleIconNvidia}
+```
 
-Recent changes since the previous GitHub version:
+Raw font codepoints are kept in the named glyph block inside `lib/icons.tex`.
 
-- Added bottom-center page numbers and a last-page copyright footer.
-- Improved flow layout for long headings, roles, and date ranges.
-- Replaced text technology badges with bundled Devicon logo glyphs and added
-  the corresponding third-party notice.
+## Validation
 
-See `CHANGELOG.md` for version history.
+`make test` checks:
+
+- `resume.pdf` and `resume.log` exist.
+- LaTeX produced no warnings, missing glyphs, or layout warnings.
+- Devicon and Simple Icons are embedded.
+- Every page has a centered page marker.
+- The copyright footer appears only on the last page.
+- The footer name matches `content/header.tex`.
+- Every `\Tech{...}` key used in `content/` is registered.
 
 ## License
 
-MIT for source code and documentation. See `LICENSE` and `NOTICE.md`.
+The source code and documentation are MIT licensed. Fonts, icon fonts, brand
+marks, and generated PDFs are governed by their own licenses. See `NOTICE.md`.

@@ -1,7 +1,8 @@
 # Fonts
 
-Inkumo uses TsangerJinKai02 for Chinese text and XCharter for Latin text. Font
-Awesome supplies the contact and technology icons.
+Inkumo uses TsangerJinKai02 for Chinese text and XCharter for Latin text. Run
+`make setup` to fetch the local fonts and icon fonts required for a complete
+build.
 
 | Family | Weight files | Role | License |
 |---|---|---|---|
@@ -16,7 +17,7 @@ TsangerJinKai02 must be obtained separately. Two options:
 ## Option 1: Download fonts locally
 
 ```bash
-bash fonts/fetch.sh
+bash scripts/fetch-fonts.sh
 ```
 
 The script downloads `TsangerJinKai02-W04.ttf` and `TsangerJinKai02-W05.ttf`
@@ -61,4 +62,4 @@ Source Han Serif SC (思源宋体), Noto Serif CJK SC, and Songti SC are all rea
 
 `fonts/*.ttf` is gitignored by default. Bundling TsangerJinKai02 in a public
 repository would redistribute the font files. Each user should fetch a local copy
-with `fonts/fetch.sh` or install the fonts system-wide.
+with `scripts/fetch-fonts.sh` or install the fonts system-wide.

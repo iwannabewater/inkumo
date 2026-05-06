@@ -1,11 +1,13 @@
-# Inkumo — build commands
+# Inkumo build commands
 #
 #   make            -> compile resume.tex with xelatex (two passes)
+#   make setup      -> fetch local fonts and icon fonts
 #   make watch      -> live rebuild on file change (needs latexmk)
-#   make fonts      -> download TsangerJinKai02 into fonts/ (needs curl or wget)
+#   make fonts      -> download TsangerJinKai02 into fonts/
+#   make icons      -> download Devicon and Simple Icons into assets/
 #   make test       -> build and validate the rendered PDF
 #   make clean      -> remove LaTeX byproducts
-#   make distclean  -> remove byproducts and the rendered PDF
+#   make distclean  -> remove byproducts and the rendered PDF; keep local assets
 
 TEX        := xelatex
 LATEXMK    := latexmk
@@ -16,7 +18,7 @@ SECTIONS   := $(wildcard content/*.tex) $(wildcard lib/*.tex) inkumo.cls
 
 XELATEX_FLAGS := -interaction=nonstopmode -halt-on-error -file-line-error
 
-.PHONY: all watch fonts test clean distclean
+.PHONY: all setup watch fonts icons test clean distclean
 
 all: $(PDF)
 
@@ -27,8 +29,13 @@ $(PDF): $(SRC) $(SECTIONS)
 watch:
 	$(LATEXMK) -xelatex -pvc -interaction=nonstopmode $(SRC)
 
+setup: fonts icons
+
 fonts:
-	bash fonts/fetch.sh
+	bash scripts/fetch-fonts.sh
+
+icons:
+	bash scripts/fetch-icons.sh
 
 test: $(PDF)
 	bash scripts/check-pdf.sh

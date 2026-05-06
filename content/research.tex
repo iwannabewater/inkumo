@@ -4,17 +4,17 @@
 \inkumosection{科研经历}
 
 \Project
-  {面向云原生集群的异常感知资源预测}
+  {面向多模态大模型的细粒度指令对齐}
   {科研项目}
   [第一作者]
   {2023.09 — 2024.05}
-\Stack{\Tech{python}{Python}\sep \Tech{pytorch}{PyTorch}\sep \Tech{kubernetes}{Kubernetes}\sep \Tech{opentelemetry}{OpenTelemetry}}
+\Stack{\Tech{python}{Python}\sep \Tech{pytorch}{PyTorch}\sep \Tech{cuda}{CUDA}\sep Transformers}
 \Desc{%
-  围绕多租户集群中的资源波动与异常负载建模，构建轻量级时序预测框架，融合指标序列、
-  事件日志与拓扑信息，在实验室真实集群回放数据上实现更稳定的容量预估。%
+  围绕视觉语言模型在细粒度场景中的指令遵循与事实一致性问题，构建高质量图文指令数据、
+  偏好样本与自动化评测流程，提升模型在复杂图像理解与跨模态推理任务上的稳定性。%
 }
 \begin{Bullets}
-  \item 设计指标清洗与异常片段标注流程，覆盖 \hl{18} 类核心资源指标与 \hl{240+} 万条运行样本
-  \item 引入注意力窗口与拓扑邻接特征，预测误差较传统 ARIMA 基线下降 \hl{31\%}
-  \item 论文初稿投稿至系统方向会议，配套实验代码与数据处理脚本整理为可复现实验包
+  \item 构建 \hl{12.8} 万条图文指令样本，覆盖文档图像、图表问答、空间关系与细粒度属性识别
+  \item 设计基于 DPO 的偏好对齐流程，复杂图像问答准确率提升 \hl{7.4} 个百分点，幻觉率下降 \hl{18.6\%}
+  \item 整理训练脚本、数据卡与评测协议，形成可复现实验包并投稿至多模态学习方向会议
 \end{Bullets}
