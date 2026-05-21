@@ -6,7 +6,7 @@ Inkumo is a XeLaTeX resume template for Chinese/English technical resumes,
 especially for CS students. It uses a parchment page, ink-blue accents,
 TsangerJinKai02 for Chinese, and XCharter for Latin text.
 
-`Inkumo` means `墨云`: ink on paper, cloud in motion. The name fits a technical
+`Inkumo` means `墨云` in Chinese: ink on paper, cloud in motion. The name fits a technical
 resume that should stay clear, restrained, and print-ready.
 
 ## Changelog
