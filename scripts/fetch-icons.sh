@@ -14,7 +14,14 @@ DEVICON_DIR="$ASSET_DIR/devicon"
 SIMPLE_DIR="$ASSET_DIR/simple-icons"
 
 DEVICON_COMMIT="7330accdbc47e2dc0c19789a48533c4a3c50fe58"
+DEVICON_FONT_SHA256="6930fe0a0f9eeac18728656da121214fa7a2fbbc8f42e3d8a103342735c4f7e8"
+DEVICON_LICENSE_SHA256="121194741d4a915b9f5890fdd6dd95121f9b1f816517c792358d72d7c838d664"
 SIMPLE_ICONS_FONT_VERSION="16.18.1"
+SIMPLE_TARBALL_SHA256="5115e9afecc20e523f05a104b974ee4fece0aa9eb420b17601fc5a924c501077"
+SIMPLE_FONT_SHA256="fac57ec7973559a9a078289e5ad714f6ecdd230ec1b86fbe73d381e84c6a361d"
+SIMPLE_JSON_SHA256="c8c32d7ecc044593b283bfed043ea892c2b4bea4516dbeffead2105902c48d28"
+SIMPLE_LICENSE_SHA256="4e39fcf4f2fe8e3c52afd4c204f783bfbf9e5726e796c9dd47329b5f0718f6d1"
+SIMPLE_DISCLAIMER_SHA256="f921095158b73e61e675ff99b327930fa95ad6f4cf667d414ffe8ae585205724"
 
 c_green=$'\033[32m'
 c_red=$'\033[31m'
@@ -22,8 +29,22 @@ c_yellow=$'\033[33m'
 c_dim=$'\033[2m'
 c_reset=$'\033[0m'
 
+sha256_matches() {
+  local file="$1" expected="$2"
+  python3 - "$file" "$expected" <<'PY'
+import hashlib
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+expected = sys.argv[2]
+actual = hashlib.sha256(path.read_bytes()).hexdigest()
+raise SystemExit(0 if actual == expected else 1)
+PY
+}
+
 download() {
-  local url="$1" target="$2"
+  local url="$1" target="$2" expected="$3"
   rm -f "$target.tmp"
 
   local ok=1
@@ -38,7 +59,7 @@ download() {
     return 1
   fi
 
-  if [[ "$ok" -eq 0 && -s "$target.tmp" ]]; then
+  if [[ "$ok" -eq 0 && -s "$target.tmp" ]] && sha256_matches "$target.tmp" "$expected"; then
     mv "$target.tmp" "$target"
     return 0
   fi
@@ -47,35 +68,36 @@ download() {
   return 1
 }
 
-require_min_size() {
-  local file="$1" min_bytes="$2"
+valid_asset() {
+  local file="$1" min_bytes="$2" expected="$3"
   [[ -f "$file" ]] || return 1
   local size
   size=$(wc -c < "$file" | tr -d ' ')
-  [[ "$size" -ge "$min_bytes" ]]
+  [[ "$size" -ge "$min_bytes" ]] || return 1
+  sha256_matches "$file" "$expected"
 }
 
 fetch_devicon() {
   mkdir -p "$DEVICON_DIR"
   local base="https://raw.githubusercontent.com/devicons/devicon/$DEVICON_COMMIT"
 
-  if require_min_size "$DEVICON_DIR/devicon.ttf" 1000000; then
+  if valid_asset "$DEVICON_DIR/devicon.ttf" 1000000 "$DEVICON_FONT_SHA256"; then
     echo "${c_dim}skip${c_reset} Devicon font"
   else
     echo "fetch Devicon font"
-    download "$base/fonts/devicon.ttf" "$DEVICON_DIR/devicon.ttf" \
+    download "$base/fonts/devicon.ttf" "$DEVICON_DIR/devicon.ttf" "$DEVICON_FONT_SHA256" \
       || { echo "${c_red}FAIL${c_reset}: Devicon font"; return 1; }
-    require_min_size "$DEVICON_DIR/devicon.ttf" 1000000 \
+    valid_asset "$DEVICON_DIR/devicon.ttf" 1000000 "$DEVICON_FONT_SHA256" \
       || { echo "${c_red}FAIL${c_reset}: Devicon font is incomplete"; return 1; }
   fi
 
-  if require_min_size "$DEVICON_DIR/LICENSE" 500; then
+  if valid_asset "$DEVICON_DIR/LICENSE" 500 "$DEVICON_LICENSE_SHA256"; then
     echo "${c_dim}skip${c_reset} Devicon license"
   else
     echo "fetch Devicon license"
-    download "$base/LICENSE" "$DEVICON_DIR/LICENSE" \
+    download "$base/LICENSE" "$DEVICON_DIR/LICENSE" "$DEVICON_LICENSE_SHA256" \
       || { echo "${c_red}FAIL${c_reset}: Devicon license"; return 1; }
-    require_min_size "$DEVICON_DIR/LICENSE" 500 \
+    valid_asset "$DEVICON_DIR/LICENSE" 500 "$DEVICON_LICENSE_SHA256" \
       || { echo "${c_red}FAIL${c_reset}: Devicon license is incomplete"; return 1; }
   fi
 }
@@ -83,8 +105,10 @@ fetch_devicon() {
 fetch_simple_icons() {
   mkdir -p "$SIMPLE_DIR"
 
-  if require_min_size "$SIMPLE_DIR/SimpleIcons.ttf" 1000000 \
-    && require_min_size "$SIMPLE_DIR/simple-icons.json" 100000; then
+  if valid_asset "$SIMPLE_DIR/SimpleIcons.ttf" 1000000 "$SIMPLE_FONT_SHA256" \
+    && valid_asset "$SIMPLE_DIR/simple-icons.json" 100000 "$SIMPLE_JSON_SHA256" \
+    && valid_asset "$SIMPLE_DIR/LICENSE.md" 500 "$SIMPLE_LICENSE_SHA256" \
+    && valid_asset "$SIMPLE_DIR/DISCLAIMER.md" 500 "$SIMPLE_DISCLAIMER_SHA256"; then
     echo "${c_dim}skip${c_reset} Simple Icons font"
     return 0
   fi
@@ -94,7 +118,7 @@ fetch_simple_icons() {
   tarball="$(mktemp "${TMPDIR:-/tmp}/inkumo-simple-icons.XXXXXX.tgz")"
   tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/inkumo-simple-icons.XXXXXX")"
 
-  if ! download "https://registry.npmjs.org/simple-icons-font/-/simple-icons-font-${SIMPLE_ICONS_FONT_VERSION}.tgz" "$tarball"; then
+  if ! download "https://registry.npmjs.org/simple-icons-font/-/simple-icons-font-${SIMPLE_ICONS_FONT_VERSION}.tgz" "$tarball" "$SIMPLE_TARBALL_SHA256"; then
     rm -rf "$tmpdir" "$tarball"
     echo "${c_red}FAIL${c_reset}: Simple Icons package"
     return 1
@@ -111,10 +135,14 @@ fetch_simple_icons() {
   install -m 0644 "$tmpdir/package/LICENSE.md" "$SIMPLE_DIR/LICENSE.md"
   install -m 0644 "$tmpdir/package/DISCLAIMER.md" "$SIMPLE_DIR/DISCLAIMER.md"
 
-  require_min_size "$SIMPLE_DIR/SimpleIcons.ttf" 1000000 \
+  valid_asset "$SIMPLE_DIR/SimpleIcons.ttf" 1000000 "$SIMPLE_FONT_SHA256" \
     || { rm -rf "$tmpdir" "$tarball"; echo "${c_red}FAIL${c_reset}: Simple Icons font is incomplete"; return 1; }
-  require_min_size "$SIMPLE_DIR/simple-icons.json" 100000 \
+  valid_asset "$SIMPLE_DIR/simple-icons.json" 100000 "$SIMPLE_JSON_SHA256" \
     || { rm -rf "$tmpdir" "$tarball"; echo "${c_red}FAIL${c_reset}: Simple Icons metadata is incomplete"; return 1; }
+  valid_asset "$SIMPLE_DIR/LICENSE.md" 500 "$SIMPLE_LICENSE_SHA256" \
+    || { rm -rf "$tmpdir" "$tarball"; echo "${c_red}FAIL${c_reset}: Simple Icons license is incomplete"; return 1; }
+  valid_asset "$SIMPLE_DIR/DISCLAIMER.md" 500 "$SIMPLE_DISCLAIMER_SHA256" \
+    || { rm -rf "$tmpdir" "$tarball"; echo "${c_red}FAIL${c_reset}: Simple Icons disclaimer is incomplete"; return 1; }
 
   if ! python3 - "$SIMPLE_DIR/simple-icons.json" <<'PY'
 import json
@@ -140,6 +168,8 @@ PY
 }
 
 mkdir -p "$ASSET_DIR"
+command -v python3 >/dev/null 2>&1 \
+  || { echo "${c_red}FAIL${c_reset}: install python3 to verify icon downloads"; exit 1; }
 
 fetch_devicon
 fetch_simple_icons

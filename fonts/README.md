@@ -21,9 +21,15 @@ bash scripts/fetch-fonts.sh
 ```
 
 The script downloads `TsangerJinKai02-W04.ttf` and `TsangerJinKai02-W05.ttf`
-from the [Kami project's CDN mirrors](https://github.com/tw93/kami) into this
-directory. The download is approximately 30 MB.
-It uses `curl` when available and falls back to `wget`.
+from a pinned revision of the [Kami project](https://github.com/tw93/kami)
+through its GitHub and CDN mirrors into this directory. The download is
+approximately 30 MB. It uses `curl` when available, falls back to `wget`, and
+checks the SHA-256 digest of each font before use.
+
+| File | SHA-256 |
+|---|---|
+| `TsangerJinKai02-W04.ttf` | `47a9b416c27ad5436794c880ce3f666a3135a862ed1e2c91aa7db48914a6a487` |
+| `TsangerJinKai02-W05.ttf` | `9744dc96801ec8c91a3390bed24c993d4722fb406e1d879177d343d40e985a6e` |
 
 The `inkumo` class detects local fonts in `fonts/` and uses them directly.
 
@@ -48,7 +54,7 @@ uses the font, etc.), you must purchase a Tsanger commercial license from
 <https://tsanger.cn> or substitute another CJK serif in `inkumo.cls`:
 
 ```latex
-% in inkumo.cls — replace TsangerJinKai02 with your alternative
+% in inkumo.cls: replace TsangerJinKai02 with your alternative
 \setCJKmainfont{Source Han Serif SC}[
   UprightFont=*-Regular,
   BoldFont=*-Medium,

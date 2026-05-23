@@ -14,6 +14,7 @@ LATEXMK    := latexmk
 MAIN       := resume
 SRC        := $(MAIN).tex
 PDF        := $(MAIN).pdf
+LOG        := $(MAIN).log
 SECTIONS   := $(wildcard content/*.tex) $(wildcard lib/*.tex) inkumo.cls
 
 XELATEX_FLAGS := -interaction=nonstopmode -halt-on-error -file-line-error
@@ -38,6 +39,10 @@ icons:
 	bash scripts/fetch-icons.sh
 
 test: $(PDF)
+	@if [ ! -s "$(LOG)" ]; then \
+		echo "rebuild $(PDF): missing $(LOG)"; \
+		$(MAKE) --no-print-directory -B "$(PDF)"; \
+	fi
 	bash scripts/check-pdf.sh
 
 clean:

@@ -571,6 +571,15 @@
 }
 
 %% ======================================================================
+%% Experience — semantic alias for compact professional or internship rows.
+%% Use \Stack, \Desc, and \begin{Bullets} afterwards when needed.
+%%   \Experience{Organisation}{Role}{Date}
+%% ======================================================================
+\NewDocumentCommand{\Experience}{m m m}{%
+  \Campus{#1}{#2}{#3}%
+}
+
+%% ======================================================================
 %% Helpers users may call directly
 %%   \Quote{...}     — editorial pull quote, brand left border
 %% ======================================================================

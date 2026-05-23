@@ -14,16 +14,22 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 FONT_DIR="$ROOT_DIR/fonts"
 MIN_SIZE_BYTES=8000000   # ~8 MB; smaller means a truncated download
+KAMI_COMMIT="3d8ff18cd7b4693b3f451a03b5f9a31740a6b358"
 
 declare -A FONTS=(
   ["TsangerJinKai02-W04.ttf"]="仓耳今楷02-W04.ttf"
   ["TsangerJinKai02-W05.ttf"]="仓耳今楷02-W05.ttf"
 )
 
+declare -A FONT_SHA256=(
+  ["TsangerJinKai02-W04.ttf"]="47a9b416c27ad5436794c880ce3f666a3135a862ed1e2c91aa7db48914a6a487"
+  ["TsangerJinKai02-W05.ttf"]="9744dc96801ec8c91a3390bed24c993d4722fb406e1d879177d343d40e985a6e"
+)
+
 CDN_MIRRORS=(
-  "https://cdn.jsdmirror.com/gh/tw93/Kami@main/assets/fonts"
-  "https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts"
-  "https://fastly.jsdelivr.net/gh/tw93/Kami@main/assets/fonts"
+  "https://raw.githubusercontent.com/tw93/Kami/$KAMI_COMMIT/assets/fonts"
+  "https://cdn.jsdelivr.net/gh/tw93/Kami@$KAMI_COMMIT/assets/fonts"
+  "https://fastly.jsdelivr.net/gh/tw93/Kami@$KAMI_COMMIT/assets/fonts"
 )
 
 OFFICIAL_BASE="https://tsanger.cn/download"
@@ -34,16 +40,31 @@ c_yellow=$'\033[33m'
 c_dim=$'\033[2m'
 c_reset=$'\033[0m'
 
+sha256_matches() {
+  local file="$1" expected="$2"
+  python3 - "$file" "$expected" <<'PY'
+import hashlib
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+expected = sys.argv[2]
+actual = hashlib.sha256(path.read_bytes()).hexdigest()
+raise SystemExit(0 if actual == expected else 1)
+PY
+}
+
 intact() {
-  local file="$1"
+  local file="$1" expected="$2"
   [[ -f "$file" ]] || return 1
   local size
   size=$(wc -c < "$file" | tr -d ' ')
-  [[ "$size" -ge "$MIN_SIZE_BYTES" ]]
+  [[ "$size" -ge "$MIN_SIZE_BYTES" ]] || return 1
+  sha256_matches "$file" "$expected"
 }
 
 download() {
-  local url="$1" target="$2"
+  local url="$1" target="$2" expected="$3"
   rm -f "$target.tmp"
 
   if command -v curl >/dev/null 2>&1; then
@@ -57,7 +78,7 @@ download() {
     return 1
   fi
 
-  if intact "$target.tmp"; then
+  if intact "$target.tmp" "$expected"; then
     mv "$target.tmp" "$target"
     return 0
   fi
@@ -67,10 +88,12 @@ download() {
 }
 
 mkdir -p "$FONT_DIR"
+command -v python3 >/dev/null 2>&1 \
+  || { echo "${c_red}FAIL${c_reset}: install python3 to verify font downloads"; exit 1; }
 
 all_present=true
 for local_name in "${!FONTS[@]}"; do
-  intact "$FONT_DIR/$local_name" || { all_present=false; break; }
+  intact "$FONT_DIR/$local_name" "${FONT_SHA256[$local_name]}" || { all_present=false; break; }
 done
 if $all_present; then
   echo "${c_green}OK${c_reset}: TsangerJinKai02 fonts already present"
@@ -81,7 +104,8 @@ failed=0
 for local_name in "${!FONTS[@]}"; do
   cn_name="${FONTS[$local_name]}"
   target="$FONT_DIR/$local_name"
-  if intact "$target"; then
+  expected="${FONT_SHA256[$local_name]}"
+  if intact "$target" "$expected"; then
     echo "${c_dim}skip${c_reset} $local_name (already present)"
     continue
   fi
@@ -90,11 +114,11 @@ for local_name in "${!FONTS[@]}"; do
   ok=false
   for base in "${CDN_MIRRORS[@]}"; do
     echo "  ${c_dim}↳ $base${c_reset}"
-    if download "$base/$local_name" "$target"; then ok=true; break; fi
+    if download "$base/$local_name" "$target" "$expected"; then ok=true; break; fi
   done
   if ! $ok; then
     echo "  ${c_dim}↳ $OFFICIAL_BASE/$cn_name (official, may be slow)${c_reset}"
-    if download "$OFFICIAL_BASE/$cn_name" "$target"; then ok=true; fi
+    if download "$OFFICIAL_BASE/$cn_name" "$target" "$expected"; then ok=true; fi
   fi
 
   if $ok; then

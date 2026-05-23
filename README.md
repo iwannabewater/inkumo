@@ -1,26 +1,36 @@
-# Inkumo
+<p align="center">
+  <img src="assets/brand/inkumo-mark.svg" width="104" alt="Inkumo ink-cloud mark">
+</p>
 
-[![Build](https://github.com/iwannabewater/inkumo/actions/workflows/build.yml/badge.svg)](https://github.com/iwannabewater/inkumo/actions/workflows/build.yml)
+<h1 align="center">Inkumo</h1>
 
-Inkumo is a XeLaTeX resume template for Chinese/English technical resumes,
-especially for CS students. It uses a parchment page, ink-blue accents,
-TsangerJinKai02 for Chinese, and XCharter for Latin text.
+<p align="center"><strong>墨云</strong> · A restrained XeLaTeX resume template for technical work.</p>
 
-`Inkumo` means `墨云` in Chinese: ink on paper, cloud in motion. The name fits a technical
-resume that should stay clear, restrained, and print-ready.
+<p align="center">
+  <a href="https://github.com/iwannabewater/inkumo/actions/workflows/build.yml"><img alt="Build" src="https://github.com/iwannabewater/inkumo/actions/workflows/build.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-1B365D?style=flat-square"></a>
+  <a href="#quick-start"><img alt="XeLaTeX" src="https://img.shields.io/badge/engine-XeLaTeX-1B365D?style=flat-square"></a>
+</p>
 
-## Changelog
+Inkumo is a Chinese and English resume template for technical profiles,
+especially students and early-career researchers. It combines a warm paper
+canvas, ink-blue detail, TsangerJinKai02 Chinese text, and XCharter Latin text
+in a modular source layout.
 
-Current update:
+`Inkumo` means `墨云`: ink on paper, cloud in motion. The bundled content is a
+layout-ready sample and should be replaced with personal details before use.
 
-- Removed the image-backed Raft icon path.
-- Moved shell scripts into `scripts/`.
-- Reworked the sample resume for large language model and multimodal research.
-- Simplified the README around one reproducible Quick Start path.
-- Replaced raw Devicon and Simple Icons codepoints in the public icon registry
-  with named glyph macros.
+## Features
 
-See `CHANGELOG.md` for the full project history.
+- XeLaTeX document class with explicit engine and font handling.
+- Modular resume sections, including education, awards, internship, research,
+  projects, and campus experience.
+- Flow-based entries with page markers and a last-page-only footer.
+- A named icon API with codepoint bindings and public mappings isolated in
+  separate modules.
+- SHA-256 verified local retrieval for untracked font and icon assets.
+- GitHub Actions validation for the PDF, embedded fonts, page markers, footer,
+  log cleanliness, and icon mappings.
 
 ## Quick Start
 
@@ -31,18 +41,9 @@ make setup
 make test
 ```
 
-`make setup` downloads local fonts and icon fonts. `make test` builds
-`resume.pdf` and validates the output.
-
-## Features
-
-- XeLaTeX document class with explicit engine checks.
-- Modular resume content under `content/`.
-- Automatic page markers and last-page copyright footer.
-- Flow-based section layout for long titles, dates, roles, and lists.
-- Font-icon registry backed by Font Awesome, Devicon, and Simple Icons.
-- CI build that checks the PDF, log, embedded fonts, page markers, footer, and
-  icon mappings.
+`make setup` retrieves the local third-party font assets and verifies their
+checksums. `make test` builds `resume.pdf` when needed and validates the
+rendered output.
 
 ## Requirements
 
@@ -52,7 +53,7 @@ make test
 | `xelatex` | PDF rendering |
 | `curl` or `wget` | asset downloads |
 | `tar` | Simple Icons package extraction |
-| `python3` | metadata checks |
+| `python3` | checksum and metadata checks |
 | `pdfinfo`, `pdffonts`, `pdftotext` | PDF validation |
 | `rg` | source and log validation |
 | `latexmk` | optional live rebuilds |
@@ -96,8 +97,9 @@ Use WSL and follow the Debian / Ubuntu commands.
 
 | Command | Description |
 |---|---|
-| `make setup` | Download local fonts and icon fonts |
-| `make test` | Build and validate `resume.pdf` |
+| `make setup` | Retrieve and verify local fonts and icon fonts |
+| `make test` | Build if needed and validate `resume.pdf` |
+| `make clean && make test` | Rebuild from a clean tree and validate |
 | `make watch` | Rebuild on file changes with `latexmk` |
 | `make clean` | Remove LaTeX byproducts |
 | `make distclean` | Run `make clean` and remove `resume.pdf` |
@@ -106,15 +108,17 @@ Use WSL and follow the Debian / Ubuntu commands.
 
 | Path | Purpose |
 |---|---|
-| `resume.tex` | document entry point |
-| `inkumo.cls` | layout, typography, PDF metadata |
-| `content/` | resume sections |
-| `lib/icons.tex` | icon registry |
-| `scripts/fetch-fonts.sh` | TsangerJinKai02 download script |
-| `scripts/fetch-icons.sh` | Devicon and Simple Icons download script |
-| `scripts/check-pdf.sh` | PDF validation script |
-| `fonts/` | ignored local CJK font files |
-| `assets/` | ignored local icon font files and tracked source notes |
+| `resume.tex` | document entry point and section order |
+| `inkumo.cls` | layout, typography, and PDF metadata |
+| `content/` | independent sample resume sections |
+| `lib/icons.tex` | stable icon facade and font loading |
+| `lib/icon-glyphs.tex` | pinned-font codepoint bindings |
+| `lib/icon-registry.tex` | public technology icon mappings |
+| `scripts/fetch-fonts.sh` | verified TsangerJinKai02 retrieval |
+| `scripts/fetch-icons.sh` | verified Devicon and Simple Icons retrieval |
+| `scripts/check-pdf.sh` | structural PDF validation |
+| `assets/brand/inkumo-mark.svg` | first-party README mark |
+| `fonts/`, `assets/devicon/`, `assets/simple-icons/` | local third-party artifacts and tracked source notes |
 
 ## Editing
 
@@ -122,15 +126,16 @@ Update the files under `content/` first:
 
 | File | Content |
 |---|---|
-| `content/header.tex` | name, contact line, role, summary |
+| `content/header.tex` | name, contact line, role, and summary |
 | `content/education.tex` | education |
 | `content/skills.tex` | skill rows |
 | `content/awards.tex` | awards |
+| `content/internship.tex` | internship experience |
 | `content/research.tex` | research entries |
 | `content/projects.tex` | project entries |
 | `content/campus.tex` | campus experience |
 
-Common macros:
+Detailed project or research entries use `\Project`:
 
 ```latex
 \inkumosection{Selected Projects}
@@ -147,17 +152,20 @@ Common macros:
 \end{Bullets}
 ```
 
+Compact internship or professional rows use `\Experience{Organisation}{Role}{Date}`
+followed by optional `\Stack`, `\Desc`, and `Bullets`.
+
 ## Icons
 
-Inkumo uses font-based icons only.
+Inkumo renders font-based icons only.
 
 | Source | Local artifact | Usage |
 |---|---|---|
 | Font Awesome 5 Free | TeX Live package | contact and generic icons |
-| Devicon | `assets/devicon/devicon.ttf` | programming languages and developer tools |
-| Simple Icons | `assets/simple-icons/SimpleIcons.ttf` | etcd, CodeMirror, NVIDIA / CUDA |
+| Devicon | `assets/devicon/devicon.ttf` | languages and developer tools |
+| Simple Icons | `assets/simple-icons/SimpleIcons.ttf` | etcd, CodeMirror, and NVIDIA / CUDA |
 
-The public registry uses named glyphs:
+Technology keys stay readable at the content boundary:
 
 ```latex
 \definePIcon{blog}{\faRssSquare}
@@ -166,13 +174,22 @@ The public registry uses named glyphs:
 \definePIcon{cuda}{\SimpleIconNvidia}
 ```
 
-Raw font codepoints are kept in the named glyph block inside `lib/icons.tex`.
+Public mappings live in `lib/icon-registry.tex`; font codepoint bindings stay
+isolated in `lib/icon-glyphs.tex`; `lib/icons.tex` is the stable import facade.
+
+## Reproducible Assets
+
+Third-party fonts are not committed. `make setup` downloads them from pinned
+upstream references and checks their SHA-256 digests before use. The source
+notes under `fonts/` and `assets/` describe each artifact and its license
+boundary. Do not commit downloaded font files or generated PDFs.
 
 ## Validation
 
 `make test` checks:
 
-- `resume.pdf` and `resume.log` exist.
+- `resume.pdf` and its matching LaTeX log exist, rebuilding if a stale PDF has
+  lost its log after cleanup.
 - LaTeX produced no warnings, missing glyphs, or layout warnings.
 - Devicon and Simple Icons are embedded.
 - Every page has a centered page marker.
@@ -180,7 +197,11 @@ Raw font codepoints are kept in the named glyph block inside `lib/icons.tex`.
 - The footer name matches `content/header.tex`.
 - Every `\Tech{...}` key used in `content/` is registered.
 
+See `CONTRIBUTING.md` for the clean-build and submission checklist, and
+`CHANGELOG.md` for notable changes.
+
 ## License
 
-The source code and documentation are MIT licensed. Fonts, icon fonts, brand
-marks, and generated PDFs are governed by their own licenses. See `NOTICE.md`.
+Source code, documentation, and `assets/brand/inkumo-mark.svg` are MIT
+licensed. Third-party fonts, icons, brands, and generated PDFs retain their
+respective license constraints. See `NOTICE.md`.

@@ -100,7 +100,7 @@ from pathlib import Path
 
 root = Path(sys.argv[1])
 content = "\n".join(path.read_text(encoding="utf-8") for path in (root / "content").glob("*.tex"))
-icons = (root / "lib" / "icons.tex").read_text(encoding="utf-8")
+icons = "\n".join(path.read_text(encoding="utf-8") for path in sorted((root / "lib").glob("*.tex")))
 
 used = set(re.findall(r"\\Tech\{([^{}]+)\}", content))
 defined = set(re.findall(r"\\definePIcon\{([^{}]+)\}", icons))

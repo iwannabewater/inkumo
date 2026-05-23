@@ -4,6 +4,9 @@ This repository contains an MIT-licensed XeLaTeX resume template. The MIT
 license applies to the source code and documentation in this repository, not to
 third-party fonts, installed TeX packages, or generated PDFs.
 
+The first-party vector mark at `assets/brand/inkumo-mark.svg` is part of the
+MIT-licensed repository source.
+
 ## TsangerJinKai02
 
 Inkumo is designed for TsangerJinKai02 W04 and W05. These font files are not

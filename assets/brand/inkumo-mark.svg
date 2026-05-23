@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Inkumo mark</title>
+  <desc id="desc">An ink-blue cloud and flowing brush line on warm paper.</desc>
+  <rect width="128" height="128" rx="27" fill="#F5F4ED"/>
+  <rect x="1" y="1" width="126" height="126" rx="26" fill="none" stroke="#E3DFD2" stroke-width="2"/>
+  <path d="M29 75c-8 0-14-6-14-13.4 0-7.1 5.8-12.8 13.2-13.3C31.7 35.5 43.2 27 56.4 27c11.5 0 21.5 6.4 25.8 16 1.8-.5 3.7-.8 5.7-.8 13.8 0 25 8.9 25 19.8 0 10.8-11.2 19.5-25 19.5H29" fill="none" stroke="#1B365D" stroke-width="4.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39 58.5c5.7-9 15.1-12.2 25.4-9.4 4.5 1.2 8.1 3.3 11.1 6.2" fill="none" stroke="#1B365D" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M31 94c18-6.4 38.9-6.8 62.6-.6" fill="none" stroke="#B87952" stroke-width="2.25" stroke-linecap="round"/>
+</svg>
