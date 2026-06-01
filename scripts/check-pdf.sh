@@ -23,6 +23,7 @@ require_command pdffonts
 require_command pdftotext
 require_command python3
 require_command rg
+require_command xelatex
 
 [[ -s "$PDF" ]] || fail "resume.pdf is missing or empty"
 [[ -s "$LOG" ]] || fail "resume.log is missing or empty"
@@ -99,14 +100,57 @@ import sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
-content = "\n".join(path.read_text(encoding="utf-8") for path in (root / "content").glob("*.tex"))
-icons = "\n".join(path.read_text(encoding="utf-8") for path in sorted((root / "lib").glob("*.tex")))
+sources = [root / "resume.tex", *sorted((root / "content").glob("*.tex"))]
+content = "\n".join(path.read_text(encoding="utf-8") for path in sources)
+registry = (root / "lib" / "icon-registry.tex").read_text(encoding="utf-8")
 
-used = set(re.findall(r"\\Tech\{([^{}]+)\}", content))
-defined = set(re.findall(r"\\definePIcon\{([^{}]+)\}", icons))
+used = set(re.findall(r"\\(?:Tech|ContactItem|PIcon)\{([^{}]+)\}", content))
+defined = set(re.findall(r"^\\definePIcon\{([^{}]+)\}", registry, re.M))
 missing = sorted(used - defined)
 if missing:
-    raise SystemExit("FAIL: missing icon mappings for \\Tech keys: " + ", ".join(missing))
+    raise SystemExit("FAIL: missing icon mappings for content keys: " + ", ".join(missing))
 PY
+
+ICON_AUDIT_TEX="$TEXT_DIR/icon-registry-audit.tex"
+ICON_AUDIT_LOG="$TEXT_DIR/icon-registry-audit.log"
+python3 - "$ROOT_DIR/lib/icon-registry.tex" "$ICON_AUDIT_TEX" <<'PY'
+import collections
+import re
+import sys
+from pathlib import Path
+
+registry = Path(sys.argv[1]).read_text(encoding="utf-8")
+target = Path(sys.argv[2])
+keys = re.findall(r"^\\definePIcon\{([^{}]+)\}", registry, re.M)
+duplicates = sorted(key for key, count in collections.Counter(keys).items() if count > 1)
+if duplicates:
+    raise SystemExit("FAIL: duplicate icon registry keys: " + ", ".join(duplicates))
+if not keys:
+    raise SystemExit("FAIL: icon registry is empty")
+
+lines = [
+    r"\documentclass{inkumo}",
+    r"\input{lib/icons.tex}",
+    r"\begin{document}",
+]
+lines.extend(r"\setbox0=\hbox{\PIcon{%s}}" % key for key in keys)
+lines.extend(["icon registry audit", r"\end{document}"])
+target.write_text("\n".join(lines) + "\n", encoding="utf-8")
+PY
+
+for pass in 1 2; do
+  if ! (
+    cd "$ROOT_DIR"
+    xelatex -interaction=nonstopmode -halt-on-error -file-line-error \
+      -output-directory="$TEXT_DIR" "$ICON_AUDIT_TEX"
+  ) >"$TEXT_DIR/icon-registry-audit-pass-$pass.txt" 2>&1; then
+    cat "$TEXT_DIR/icon-registry-audit-pass-$pass.txt" >&2
+    fail "icon registry smoke test failed on XeLaTeX pass $pass"
+  fi
+done
+
+if rg -n "^!|Error:|Package .* Error|LaTeX .*Warning|Package .*Warning|Overfull|Underfull|undefined|Unknown CJK|Missing character" "$ICON_AUDIT_LOG"; then
+  fail "icon registry smoke test log contains warnings or layout issues"
+fi
 
 echo "OK: resume.pdf passed structural PDF checks"

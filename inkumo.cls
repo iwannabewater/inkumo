@@ -252,13 +252,21 @@
 
 %% ======================================================================
 %% Hairlines
-%%   \entryleadline   — full-width blue hairline before a section's first entry
+%%   \entryleadline   — full-width ink-blue dashed hairline before a section's first entry
 %%   \dottedhairline  — dashed leader in border        (between data rows)
 %%   \warmhairline    — 0.5pt peach (kami@headerline)  (under header only)
 %% ======================================================================
 \newcommand{\entryleadline}{%
   \par\addvspace{0.25mm}%
-  {\color{kami@brandlight!36!kami@border}\noindent\rule{\linewidth}{0.4pt}}%
+  \noindent
+  \makebox[0pt][l]{\tikz{%
+    \draw[
+      dash pattern={on 1.1pt off 1.7pt},
+      color=kami@brand!48!kami@border,
+      line width=0.45pt,
+      line cap=round,
+    ] (0,0) -- (\linewidth,0);%
+  }}%
   \par\addvspace{0.35mm}%
 }
 \newcommand{\dottedhairline}{%

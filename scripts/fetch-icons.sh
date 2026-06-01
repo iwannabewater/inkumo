@@ -77,6 +77,24 @@ valid_asset() {
   sha256_matches "$file" "$expected"
 }
 
+validate_simple_icons_metadata() {
+  local metadata="$1"
+  python3 - "$metadata" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+icons = {item["slug"]: item for item in json.loads(Path(sys.argv[1]).read_text())}
+required = {"etcd": "ed88", "codemirror": "ec41", "nvidia": "f1f4"}
+missing = []
+for slug, code in required.items():
+    if slug not in icons or icons[slug].get("code", "").lower() != code:
+        missing.append(f"{slug}:{code}")
+if missing:
+    raise SystemExit("missing expected Simple Icons glyphs: " + ", ".join(missing))
+PY
+}
+
 fetch_devicon() {
   mkdir -p "$DEVICON_DIR"
   local base="https://raw.githubusercontent.com/devicons/devicon/$DEVICON_COMMIT"
@@ -108,7 +126,8 @@ fetch_simple_icons() {
   if valid_asset "$SIMPLE_DIR/SimpleIcons.ttf" 1000000 "$SIMPLE_FONT_SHA256" \
     && valid_asset "$SIMPLE_DIR/simple-icons.json" 100000 "$SIMPLE_JSON_SHA256" \
     && valid_asset "$SIMPLE_DIR/LICENSE.md" 500 "$SIMPLE_LICENSE_SHA256" \
-    && valid_asset "$SIMPLE_DIR/DISCLAIMER.md" 500 "$SIMPLE_DISCLAIMER_SHA256"; then
+    && valid_asset "$SIMPLE_DIR/DISCLAIMER.md" 500 "$SIMPLE_DISCLAIMER_SHA256" \
+    && validate_simple_icons_metadata "$SIMPLE_DIR/simple-icons.json"; then
     echo "${c_dim}skip${c_reset} Simple Icons font"
     return 0
   fi
@@ -144,21 +163,7 @@ fetch_simple_icons() {
   valid_asset "$SIMPLE_DIR/DISCLAIMER.md" 500 "$SIMPLE_DISCLAIMER_SHA256" \
     || { rm -rf "$tmpdir" "$tarball"; echo "${c_red}FAIL${c_reset}: Simple Icons disclaimer is incomplete"; return 1; }
 
-  if ! python3 - "$SIMPLE_DIR/simple-icons.json" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-icons = {item["slug"]: item for item in json.loads(Path(sys.argv[1]).read_text())}
-required = {"etcd": "ed88", "codemirror": "ec41", "nvidia": "f1f4"}
-missing = []
-for slug, code in required.items():
-    if slug not in icons or icons[slug].get("code", "").lower() != code:
-        missing.append(f"{slug}:{code}")
-if missing:
-    raise SystemExit("missing expected Simple Icons glyphs: " + ", ".join(missing))
-PY
-  then
+  if ! validate_simple_icons_metadata "$SIMPLE_DIR/simple-icons.json"; then
     rm -rf "$tmpdir" "$tarball"
     echo "${c_red}FAIL${c_reset}: Simple Icons metadata check failed"
     return 1
