@@ -24,8 +24,8 @@ content.
   stable document concept.
 - Keep `lib/icons.tex` as the public facade; codepoints belong in
   `lib/icon-glyphs.tex` and key mappings in `lib/icon-registry.tex`.
-- Use `\ContactHref` for clickable header labels so the contact line can wrap
-  cleanly without detaching icons from labels.
+- Use `\ContactHref` for clickable header labels so long labels and the contact
+  line can wrap cleanly without detaching icons from labels.
 - Preserve the restrained paper-and-ink visual language unless a change has a
   documented design purpose.
 

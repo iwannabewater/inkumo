@@ -142,7 +142,7 @@ Update the files under `content/` first:
 
 Use `\ContactHref{key}{url}{label}` for email, website, profile, and handle
 labels in the header. It keeps the icon attached to the label while allowing
-the contact line to wrap cleanly between items.
+long labels and the contact line to wrap cleanly.
 
 Detailed project or research entries use `\Project`:
 

@@ -39,6 +39,7 @@
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
 \RequirePackage{xstring}
+\RequirePackage{seqsplit}
 \RequirePackage{needspace}
 \RequirePackage{tabularx}
 \RequirePackage{array}
@@ -233,8 +234,9 @@
 \let\dotsep\sep
 \newcommand{\pipesep}{\,{\color{kami@stone}|}\,}
 \newcommand{\ContactItem}[2]{\mbox{\PIcon{#1}\hspace{0.22em}}#2}
+\newcommand{\inkumo@contactlabel}[1]{\seqsplit{#1}}
 \NewDocumentCommand{\ContactHref}{m m m}{%
-  \ContactItem{#1}{\href{#2}{#3}}%
+  \ContactItem{#1}{\href{#2}{\inkumo@contactlabel{#3}}}%
 }
 \newcommand{\Tech}[2]{\PIcon{#1}\hspace{0.18em}#2}
 \newcommand{\cplusplus}{\mbox{C\kern-0.03em+\kern-0.16em+}}

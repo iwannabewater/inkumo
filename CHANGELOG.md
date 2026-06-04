@@ -6,9 +6,7 @@ All notable changes to Inkumo are recorded here.
 
 - Added source-level validation for icon mappings, local asset boundaries, and
   flow-layout guardrails.
-- Added break-friendly header link helpers for long email, profile, and website
-  labels.
-- Added project-level agent guidance for future AI-assisted edits.
+- Hardened header link wrapping for long email, profile, and website labels.
 - Fixed `make setup` on macOS Bash 3.2 by removing Bash 4 associative arrays
   from the font fetch script.
 - Added bottom-center page markers and a last-page-only copyright footer.
