@@ -43,6 +43,7 @@
 \RequirePackage{tabularx}
 \RequirePackage{array}
 \RequirePackage{tikz}
+\RequirePackage{xurl}
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage[
   protrusion=true,
@@ -94,6 +95,8 @@
   pdfcreator={Inkumo},
   pdfproducer={LaTeX with the inkumo class},
 }
+\urlstyle{same}
+\Urlmuskip=0mu plus 2mu\relax
 
 \newcommand{\inkumo@author}{}
 \newcommand{\inkumo@twodigits}[1]{\ifnum#1<10 0\fi\number#1}
@@ -226,10 +229,15 @@
   {\color{kami@stone}\raisebox{0.18ex}{\fontsize{4.3pt}{4.3pt}\selectfont\textbullet}}%
 }
 \newcommand{\sep}{\nobreak\hspace{0.42em}\inkumo@dot\hspace{0.42em}\ignorespaces}
-\newcommand{\contactsep}{\nobreak\hspace{0.56em}\inkumo@dot\hspace{0.56em}\ignorespaces}
+\newcommand{\contactsep}{%
+  \nobreak\hspace{0.56em}\inkumo@dot\hspace{0.56em}\penalty0\ignorespaces%
+}
 \let\dotsep\sep
 \newcommand{\pipesep}{\,{\color{kami@stone}|}\,}
-\newcommand{\ContactItem}[2]{\PIcon{#1}\hspace{0.22em}#2}
+\newcommand{\ContactItem}[2]{\mbox{\PIcon{#1}\hspace{0.22em}}#2}
+\NewDocumentCommand{\ContactHref}{m m m}{%
+  \ContactItem{#1}{\href{#2}{\nolinkurl{#3}}}%
+}
 \newcommand{\Tech}[2]{\PIcon{#1}\hspace{0.18em}#2}
 \newcommand{\cplusplus}{\mbox{C\kern-0.03em+\kern-0.16em+}}
 
@@ -240,12 +248,31 @@
 
 %% Tabular numbers — for dates, ranks, GPAs
 \newcommand{\tnum}[1]{{\addfontfeatures{Numbers={Tabular}}#1}}
+\newcommand{\inkumo@flowtext}{%
+  \raggedright
+  \tolerance=1600
+  \emergencystretch=1.8em
+  \hyphenpenalty=500
+  \exhyphenpenalty=100
+}
+\newcommand{\inkumo@righttext}{%
+  \raggedleft
+  \tolerance=1800
+  \emergencystretch=1.2em
+}
+\newcommand{\inkumo@contacttext}{%
+  \raggedright
+  \tolerance=1800
+  \emergencystretch=2.4em
+  \hyphenpenalty=300
+  \exhyphenpenalty=50
+}
 \newcommand{\inkumo@flowrow}[3]{%
-  \begin{minipage}[t]{\dimexpr\linewidth-#1-2mm\relax}\raggedright
+  \begin{minipage}[t]{\dimexpr\linewidth-#1-2mm\relax}\inkumo@flowtext
     #2%
   \end{minipage}%
   \hfill
-  \begin{minipage}[t]{#1}\raggedleft
+  \begin{minipage}[t]{#1}\inkumo@righttext
     #3%
   \end{minipage}%
 }
@@ -396,7 +423,7 @@
   \par\vspace{2.2mm}%
   %% Contact line
   \noindent
-  {\fontsize{9.2pt}{12.5pt}\selectfont\color{kami@stone}#3}%
+  {\fontsize{9.2pt}{12.5pt}\selectfont\color{kami@stone}\inkumo@contacttext #3}%
   \par\vspace{0.6mm}%
   %% Optional summary
   \IfValueT{#5}{%

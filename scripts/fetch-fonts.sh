@@ -16,14 +16,17 @@ FONT_DIR="$ROOT_DIR/fonts"
 MIN_SIZE_BYTES=8000000   # ~8 MB; smaller means a truncated download
 KAMI_COMMIT="3d8ff18cd7b4693b3f451a03b5f9a31740a6b358"
 
-declare -A FONTS=(
-  ["TsangerJinKai02-W04.ttf"]="仓耳今楷02-W04.ttf"
-  ["TsangerJinKai02-W05.ttf"]="仓耳今楷02-W05.ttf"
+FONT_LOCAL_NAMES=(
+  "TsangerJinKai02-W04.ttf"
+  "TsangerJinKai02-W05.ttf"
 )
-
-declare -A FONT_SHA256=(
-  ["TsangerJinKai02-W04.ttf"]="47a9b416c27ad5436794c880ce3f666a3135a862ed1e2c91aa7db48914a6a487"
-  ["TsangerJinKai02-W05.ttf"]="9744dc96801ec8c91a3390bed24c993d4722fb406e1d879177d343d40e985a6e"
+FONT_SOURCE_NAMES=(
+  "仓耳今楷02-W04.ttf"
+  "仓耳今楷02-W05.ttf"
+)
+FONT_SHA256S=(
+  "47a9b416c27ad5436794c880ce3f666a3135a862ed1e2c91aa7db48914a6a487"
+  "9744dc96801ec8c91a3390bed24c993d4722fb406e1d879177d343d40e985a6e"
 )
 
 CDN_MIRRORS=(
@@ -92,8 +95,10 @@ command -v python3 >/dev/null 2>&1 \
   || { echo "${c_red}FAIL${c_reset}: install python3 to verify font downloads"; exit 1; }
 
 all_present=true
-for local_name in "${!FONTS[@]}"; do
-  intact "$FONT_DIR/$local_name" "${FONT_SHA256[$local_name]}" || { all_present=false; break; }
+for i in "${!FONT_LOCAL_NAMES[@]}"; do
+  local_name="${FONT_LOCAL_NAMES[$i]}"
+  expected="${FONT_SHA256S[$i]}"
+  intact "$FONT_DIR/$local_name" "$expected" || { all_present=false; break; }
 done
 if $all_present; then
   echo "${c_green}OK${c_reset}: TsangerJinKai02 fonts already present"
@@ -101,10 +106,11 @@ if $all_present; then
 fi
 
 failed=0
-for local_name in "${!FONTS[@]}"; do
-  cn_name="${FONTS[$local_name]}"
+for i in "${!FONT_LOCAL_NAMES[@]}"; do
+  local_name="${FONT_LOCAL_NAMES[$i]}"
+  cn_name="${FONT_SOURCE_NAMES[$i]}"
   target="$FONT_DIR/$local_name"
-  expected="${FONT_SHA256[$local_name]}"
+  expected="${FONT_SHA256S[$i]}"
   if intact "$target" "$expected"; then
     echo "${c_dim}skip${c_reset} $local_name (already present)"
     continue

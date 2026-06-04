@@ -36,6 +36,9 @@ jobs:
             texlive-fonts-extra \
             texlive-lang-chinese
 
+      - name: Validate source
+        run: make lint
+
       - name: Fetch local-use assets
         run: make setup
 

@@ -5,6 +5,7 @@
 #   make watch      -> live rebuild on file change (needs latexmk)
 #   make fonts      -> download TsangerJinKai02 into fonts/
 #   make icons      -> download Devicon and Simple Icons into assets/
+#   make lint       -> validate source invariants without a TeX runtime
 #   make test       -> build and validate the rendered PDF
 #   make clean      -> remove LaTeX byproducts
 #   make distclean  -> remove byproducts and the rendered PDF; keep local assets
@@ -19,7 +20,7 @@ SECTIONS   := $(wildcard content/*.tex) $(wildcard lib/*.tex) inkumo.cls
 
 XELATEX_FLAGS := -interaction=nonstopmode -halt-on-error -file-line-error
 
-.PHONY: all setup watch fonts icons test clean distclean
+.PHONY: all setup watch fonts icons lint test clean distclean
 
 all: $(PDF)
 
@@ -38,7 +39,10 @@ fonts:
 icons:
 	bash scripts/fetch-icons.sh
 
-test: $(PDF)
+lint:
+	bash scripts/check-source.sh
+
+test: lint $(PDF)
 	@if [ ! -s "$(LOG)" ]; then \
 		echo "rebuild $(PDF): missing $(LOG)"; \
 		$(MAKE) --no-print-directory -B "$(PDF)"; \

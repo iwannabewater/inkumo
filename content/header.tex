@@ -3,7 +3,7 @@
 %% \inkumoheader takes 5 parameters; the brackets [] are LaTeX optional args:
 %%   #1 name             (required)
 %%   #2 alias / EN name  (optional, in stone gray, baseline-aligned)
-%%   #3 contact line     (required, freeform — uses \ContactItem and \contactsep)
+%%   #3 contact line     (required, freeform, uses \ContactItem / \ContactHref and \contactsep)
 %%   #4 role / title     (optional, top-right brand color)
 %%   #5 summary          (optional paragraph below contact)
 
@@ -13,19 +13,19 @@
   {%
     \ContactItem{phone}{(+86)~133-3333-3333}%
     \contactsep
-    \ContactItem{email}{\href{mailto:caixukun@example.com}{caixukun@example.com}}%
+    \ContactHref{email}{mailto:caixukun@example.com}{caixukun@example.com}%
     \contactsep
-    \ContactItem{github}{\href{https://github.com/caixukun-dev}{github.com/caixukun-dev}}%
+    \ContactHref{github}{https://github.com/caixukun-dev}{github.com/caixukun-dev}%
     \contactsep
-    \ContactItem{telegram}{\href{https://t.me/cai_xukun}{@cai\_xukun}}%
+    \ContactHref{telegram}{https://t.me/cai_xukun}{@cai_xukun}%
     \contactsep
-    \ContactItem{website}{\href{https://caixukun.dev}{caixukun.dev}}%
+    \ContactHref{website}{https://caixukun.dev}{caixukun.dev}%
     \\[1.4pt]%
     \ContactItem{education}{清华大学}%
     \contactsep
     \ContactItem{major}{计算机科学与技术}%
     \contactsep
-    \ContactItem{linkedin}{\href{https://linkedin.com/in/cai-xukun}{linkedin.com/in/cai-xukun}}%
+    \ContactHref{linkedin}{https://linkedin.com/in/cai-xukun}{linkedin.com/in/cai-xukun}%
     \contactsep
     \ContactItem{location}{北京}%
   }

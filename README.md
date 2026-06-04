@@ -28,6 +28,8 @@ layout-ready sample and should be replaced with personal details before use.
 - Flow-based entries with page markers and a last-page-only footer.
 - A named icon API with codepoint bindings and public mappings isolated in
   separate modules.
+- Break-friendly contact links and row text tuned for long names, roles, URLs,
+  and mixed Chinese / English content.
 - SHA-256 verified local retrieval for untracked font and icon assets.
 - GitHub Actions validation for the PDF, embedded fonts, page markers, footer,
   log cleanliness, and icon mappings.
@@ -38,12 +40,13 @@ layout-ready sample and should be replaced with personal details before use.
 git clone https://github.com/iwannabewater/inkumo.git
 cd inkumo
 make setup
+make lint
 make test
 ```
 
 `make setup` retrieves the local third-party font assets and verifies their
-checksums. `make test` builds `resume.pdf` when needed and validates the
-rendered output.
+checksums. `make lint` runs source checks that do not need a TeX runtime.
+`make test` builds `resume.pdf` when needed and validates the rendered output.
 
 ## Requirements
 
@@ -98,6 +101,7 @@ Use WSL and follow the Debian / Ubuntu commands.
 | Command | Description |
 |---|---|
 | `make setup` | Retrieve and verify local fonts and icon fonts |
+| `make lint` | Validate source invariants without compiling the PDF |
 | `make test` | Build if needed and validate `resume.pdf` |
 | `make clean && make test` | Rebuild from a clean tree and validate |
 | `make watch` | Rebuild on file changes with `latexmk` |
@@ -116,6 +120,7 @@ Use WSL and follow the Debian / Ubuntu commands.
 | `lib/icon-registry.tex` | public technology icon mappings |
 | `scripts/fetch-fonts.sh` | verified TsangerJinKai02 retrieval |
 | `scripts/fetch-icons.sh` | verified Devicon and Simple Icons retrieval |
+| `scripts/check-source.sh` | source-level validation |
 | `scripts/check-pdf.sh` | structural PDF validation |
 | `assets/brand/inkumo-mark.svg` | first-party README mark |
 | `fonts/`, `assets/devicon/`, `assets/simple-icons/` | local third-party artifacts and tracked source notes |
@@ -134,6 +139,10 @@ Update the files under `content/` first:
 | `content/research.tex` | research entries |
 | `content/projects.tex` | project entries |
 | `content/campus.tex` | campus experience |
+
+Use `\ContactHref{key}{url}{label}` for email, website, profile, and handle
+labels in the header. It keeps the icon attached to the label while allowing
+long link text to wrap at URL-friendly breakpoints.
 
 Detailed project or research entries use `\Project`:
 
@@ -186,7 +195,17 @@ boundary. Do not commit downloaded font files or generated PDFs.
 
 ## Validation
 
-`make test` checks:
+`make lint` checks:
+
+- Every `\Tech`, `\ContactItem`, `\ContactHref`, and `\PIcon` key used in
+  content has a public mapping.
+- Icon registry keys are unique.
+- Generated PDFs, downloaded fonts, and local third-party icon artifacts are
+  not tracked.
+- The class does not use zero-width `\rlap` headings.
+- Shell scripts stay compatible with macOS Bash 3.2.
+
+`make test` also checks:
 
 - `resume.pdf` and its matching LaTeX log exist, rebuilding if a stale PDF has
   lost its log after cleanup.

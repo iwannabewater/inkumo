@@ -5,6 +5,7 @@
 ## Verification
 
 - [ ] Ran `make setup`
+- [ ] Ran `make lint`
 - [ ] Ran `make clean && make test`
 - [ ] Inspected rendered pages when layout, typography, or content changed
 - [ ] Confirmed downloaded fonts, icon font artifacts, and generated PDFs are not committed

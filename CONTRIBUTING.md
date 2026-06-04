@@ -7,11 +7,13 @@ boundary. Keep changes focused, readable, and reproducible.
 
 ```bash
 make setup
+make lint
 make clean && make test
 ```
 
-Run a clean validation for any change to the class, content sections, icon
-modules, asset scripts, build rules, or continuous integration workflow.
+Run `make lint` for every change. Run a clean validation for any change to the
+class, content sections, icon modules, asset scripts, build rules, or
+continuous integration workflow.
 Inspect the rendered pages when changing typography, spacing, or sample
 content.
 
@@ -22,6 +24,8 @@ content.
   stable document concept.
 - Keep `lib/icons.tex` as the public facade; codepoints belong in
   `lib/icon-glyphs.tex` and key mappings in `lib/icon-registry.tex`.
+- Use `\ContactHref` for clickable header labels so long links can wrap
+  cleanly without detaching the icon.
 - Preserve the restrained paper-and-ink visual language unless a change has a
   documented design purpose.
 

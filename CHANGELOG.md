@@ -4,6 +4,13 @@ All notable changes to Inkumo are recorded here.
 
 ## Unreleased
 
+- Added source-level validation for icon mappings, local asset boundaries, and
+  flow-layout guardrails.
+- Added break-friendly header link helpers for long email, profile, and website
+  labels.
+- Added project-level agent guidance for future AI-assisted edits.
+- Fixed `make setup` on macOS Bash 3.2 by removing Bash 4 associative arrays
+  from the font fetch script.
 - Added bottom-center page markers and a last-page-only copyright footer.
 - Reworked section and entry rows to support wrapping and pagination.
 - Added a compact internship section and reusable `\Experience` row primitive.
