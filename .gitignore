@@ -20,7 +20,8 @@
 .DS_Store
 Thumbs.db
 
-# Local agent settings may contain private paths or credentials.
+# Local agent files may contain private paths, credentials, or implementation notes.
+AGENTS.md
 .claude/settings.local.json
 
 # Fonts — TsangerJinKai02 is free-for-personal-use only.
