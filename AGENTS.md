@@ -47,8 +47,8 @@ Guidance for AI-assisted edits in this repository.
 
 - Prefer flow-based rows that allow wrapping over zero-width overlays or
   hand-positioned text.
-- Use `\ContactHref{key}{url}{label}` for clickable header labels so long URLs
-  can wrap cleanly.
+- Use `\ContactHref{key}{url}{label}` for clickable header labels so the contact
+  line can wrap cleanly between items.
 - Keep icons attached to their labels, but allow breaks between contact items.
 - Keep dates and short metadata in the right column. If metadata becomes long,
   let it wrap rather than shrinking the main text below the document rhythm.

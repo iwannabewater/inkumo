@@ -28,8 +28,8 @@ layout-ready sample and should be replaced with personal details before use.
 - Flow-based entries with page markers and a last-page-only footer.
 - A named icon API with codepoint bindings and public mappings isolated in
   separate modules.
-- Break-friendly contact links and row text tuned for long names, roles, URLs,
-  and mixed Chinese / English content.
+- Break-friendly contact rows and relaxed row text tuned for long names, roles,
+  profile labels, and mixed Chinese / English content.
 - SHA-256 verified local retrieval for untracked font and icon assets.
 - GitHub Actions validation for the PDF, embedded fonts, page markers, footer,
   log cleanliness, and icon mappings.
@@ -142,7 +142,7 @@ Update the files under `content/` first:
 
 Use `\ContactHref{key}{url}{label}` for email, website, profile, and handle
 labels in the header. It keeps the icon attached to the label while allowing
-long link text to wrap at URL-friendly breakpoints.
+the contact line to wrap cleanly between items.
 
 Detailed project or research entries use `\Project`:
 

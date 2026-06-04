@@ -43,7 +43,6 @@
 \RequirePackage{tabularx}
 \RequirePackage{array}
 \RequirePackage{tikz}
-\RequirePackage{xurl}
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage[
   protrusion=true,
@@ -96,7 +95,6 @@
   pdfproducer={LaTeX with the inkumo class},
 }
 \urlstyle{same}
-\Urlmuskip=0mu plus 2mu\relax
 
 \newcommand{\inkumo@author}{}
 \newcommand{\inkumo@twodigits}[1]{\ifnum#1<10 0\fi\number#1}
@@ -236,7 +234,7 @@
 \newcommand{\pipesep}{\,{\color{kami@stone}|}\,}
 \newcommand{\ContactItem}[2]{\mbox{\PIcon{#1}\hspace{0.22em}}#2}
 \NewDocumentCommand{\ContactHref}{m m m}{%
-  \ContactItem{#1}{\href{#2}{\nolinkurl{#3}}}%
+  \ContactItem{#1}{\href{#2}{#3}}%
 }
 \newcommand{\Tech}[2]{\PIcon{#1}\hspace{0.18em}#2}
 \newcommand{\cplusplus}{\mbox{C\kern-0.03em+\kern-0.16em+}}
