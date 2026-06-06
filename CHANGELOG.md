@@ -4,6 +4,8 @@ All notable changes to Inkumo are recorded here.
 
 ## Unreleased
 
+- Refined project role labels with a warm engraved-paper tint that complements
+  the ink-blue type and parchment canvas.
 - Added source-level validation for icon mappings, local asset boundaries, and
   flow-layout guardrails.
 - Hardened header link wrapping for long email, profile, and website labels.

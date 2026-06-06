@@ -70,6 +70,8 @@
 \definecolor{kami@brandtint}{HTML}{EEF2F7}
 \definecolor{kami@brandtintstrong}{HTML}{E4ECF5}
 \definecolor{kami@headerline}{HTML}{E3BAA9} % warm peach header divider — a Kami signature
+\definecolor{kami@rolefill}{HTML}{F0E5DC}
+\definecolor{kami@roleborder}{HTML}{D8C1B5}
 
 %% Public-facing aliases so users may reference colors in their content
 \colorlet{InkBlue}{kami@brand}
@@ -374,15 +376,16 @@
 }
 
 %% ======================================================================
-%% Brand-tint role pill — used in the Project header.
+%% Warm engraved role pill — used in the Project header.
 %% Solid hex background (Kami invariant #8: never rgba; LaTeX has no
-%% double-rectangle bug, but we keep solid for parity with the HTML system).
+%% double-rectangle bug). Its warm plate tone bridges the parchment canvas
+%% and peach header rule while retaining the ink-blue type.
 %% ======================================================================
 \newcommand{\rolepill}[1]{%
   \tikz[baseline=(t.base)]{%
     \node[
-      fill=kami@brandtint,
-      draw=kami@brandlight!28!kami@border,
+      fill=kami@rolefill,
+      draw=kami@roleborder,
       line width=0.25pt,
       rounded corners=1.6pt,
       inner xsep=4.2pt, inner ysep=1.25pt,
