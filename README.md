@@ -26,6 +26,8 @@ layout-ready sample and should be replaced with personal details before use.
 - Modular resume sections, including education, awards, internship, research,
   projects, and campus experience.
 - Flow-based entries with page markers and a last-page-only footer.
+- Optional profile photo support that keeps the default text-only header
+  unchanged.
 - A named icon API with codepoint bindings and public mappings isolated in
   separate modules.
 - Break-friendly contact rows and relaxed row text tuned for long names, roles,
@@ -144,6 +146,19 @@ Use `\ContactHref{key}{url}{label}` for email, website, profile, and handle
 labels in the header. It keeps the icon attached to the label while allowing
 long labels and the contact line to wrap cleanly.
 
+If a profile photo is appropriate for your target market, call
+`\inkumoavatar` before `\inkumoheader` in `content/header.tex`:
+
+```latex
+\inkumoavatar[24mm]{content/avatar.pdf}
+```
+
+The photo is optional. Without this command, the header renders exactly as a
+text-only resume. Use a square PDF, PNG, or JPG and keep the displayed size
+around 22-26 mm. Keep the file local unless you intend to publish personal image
+data, and avoid using it as an icon system. The default `.gitignore` excludes
+common local avatar paths.
+
 Detailed project or research entries use `\Project`:
 
 ```latex
@@ -191,7 +206,8 @@ isolated in `lib/icon-glyphs.tex`; `lib/icons.tex` is the stable import facade.
 Third-party fonts are not committed. `make setup` downloads them from pinned
 upstream references and checks their SHA-256 digests before use. The source
 notes under `fonts/` and `assets/` describe each artifact and its license
-boundary. Do not commit downloaded font files or generated PDFs.
+boundary. Do not commit downloaded font files, generated PDFs, or personal
+profile photos.
 
 ## Validation
 
@@ -200,8 +216,10 @@ boundary. Do not commit downloaded font files or generated PDFs.
 - Every `\Tech`, `\ContactItem`, `\ContactHref`, and `\PIcon` key used in
   content has a public mapping.
 - Icon registry keys are unique.
-- Generated PDFs, downloaded fonts, and local third-party icon artifacts are
-  not tracked.
+- Generated PDFs, downloaded fonts, local third-party icon artifacts, and
+  personal profile photos are not tracked.
+- Resume content uses class-level image primitives such as `\inkumoavatar`
+  instead of raw `\includegraphics`.
 - The class does not use zero-width `\rlap` headings.
 - Shell scripts stay compatible with macOS Bash 3.2.
 
@@ -215,6 +233,8 @@ boundary. Do not commit downloaded font files or generated PDFs.
 - The copyright footer appears only on the last page.
 - The footer name matches `content/header.tex`.
 - Every `\Tech{...}` key used in `content/` is registered.
+- The optional profile-photo header compiles with a real image and gracefully
+  falls back when an avatar path is missing.
 
 See `CONTRIBUTING.md` for the clean-build and submission checklist, and
 `CHANGELOG.md` for notable changes.

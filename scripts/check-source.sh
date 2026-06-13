@@ -21,6 +21,10 @@ if rg -n "\\\\rlap" "$ROOT_DIR/inkumo.cls"; then
   fail "flow layout should not use zero-width rlapped headings"
 fi
 
+if rg -n "\\\\includegraphics" "$ROOT_DIR/resume.tex" "$ROOT_DIR/content"; then
+  fail "content should use \\inkumoavatar or a class-level primitive instead of raw \\includegraphics"
+fi
+
 if rg -n "declare[[:space:]]+-A" "$ROOT_DIR/scripts"; then
   fail "shell scripts must stay compatible with macOS Bash 3.2"
 fi
@@ -75,6 +79,10 @@ if git_check.returncode == 0:
 
 forbidden_patterns = [
     "*.pdf",
+    "avatar.*",
+    "content/avatar.*",
+    "assets/avatar.*",
+    "local/*",
     "fonts/*.ttf",
     "fonts/*.otf",
     "fonts/*.woff",
@@ -93,7 +101,7 @@ if tracked:
         if any(fnmatch.fnmatch(path, pattern) for pattern in forbidden_patterns)
     ]
     if forbidden:
-        fail("tracked generated or third-party local assets: " + ", ".join(forbidden))
+        fail("tracked generated, third-party, or personal local assets: " + ", ".join(forbidden))
 PY
 
 echo "OK: source checks passed"

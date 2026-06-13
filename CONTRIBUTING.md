@@ -14,8 +14,8 @@ make clean && make test
 Run `make lint` for every change. Run a clean validation for any change to the
 class, content sections, icon modules, asset scripts, build rules, or
 continuous integration workflow.
-Inspect the rendered pages when changing typography, spacing, or sample
-content.
+Inspect the rendered pages when changing typography, spacing, header behavior,
+avatar support, or sample content.
 
 ## Structure
 
@@ -26,6 +26,9 @@ content.
   `lib/icon-glyphs.tex` and key mappings in `lib/icon-registry.tex`.
 - Use `\ContactHref` for clickable header labels so long labels and the contact
   line can wrap cleanly without detaching icons from labels.
+- Use `\inkumoavatar` for optional profile photos. Keep personal image files
+  local by default and verify both avatar and text-only headers after layout
+  changes.
 - Preserve the restrained paper-and-ink visual language unless a change has a
   documented design purpose.
 

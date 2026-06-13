@@ -40,5 +40,11 @@ assets/simple-icons/simple-icons.json
 assets/simple-icons/LICENSE.md
 assets/simple-icons/DISCLAIMER.md
 
+# Personal profile photos used with \inkumoavatar.
+avatar.*
+content/avatar.*
+assets/avatar.*
+local/
+
 # Rendered PDFs may embed local personal-use font subsets.
 *.pdf

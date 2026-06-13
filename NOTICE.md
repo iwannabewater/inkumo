@@ -54,6 +54,15 @@ when the icon package itself is permissively licensed. Check the downloaded
 `assets/simple-icons/simple-icons.json` metadata and each brand's own policy
 before publishing commercial materials.
 
+## Profile Photos
+
+Inkumo can include a user-supplied profile photo through `\inkumoavatar`. This
+repository does not provide portrait files and ignores common local avatar
+paths by default.
+
+Users are responsible for image rights, privacy, and consent before publishing
+or distributing a generated resume. Generated PDFs may embed the profile photo.
+
 ## Local Font Artifacts
 
 The `fonts/` and `assets/` directories may contain local `.ttf`, `.otf`,

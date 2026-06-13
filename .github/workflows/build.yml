@@ -51,7 +51,7 @@ jobs:
       - name: Scan LaTeX log
         run: |
           set +e
-          rg -n "^!|Error:|Package .* Error|LaTeX .*Warning|Package .*Warning|Overfull|Underfull|undefined|Unknown CJK|Missing character" resume.log
+          rg -n "^!|Error:|Class .*Warning|Package .* Error|LaTeX .*Warning|Package .*Warning|Overfull|Underfull|undefined|Unknown CJK|Missing character" resume.log
           status=$?
           set -e
           if [ "$status" -eq 0 ]; then
