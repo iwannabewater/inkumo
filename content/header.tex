@@ -3,7 +3,7 @@
 %% \inkumoheader takes 5 parameters; the brackets [] are LaTeX optional args:
 %%   #1 name             (required)
 %%   #2 alias / EN name  (optional, in stone gray, baseline-aligned)
-%%   #3 contact line     (required, freeform, uses \ContactItem / \ContactHref and \contactsep)
+%%   #3 contact details  (required, use \ContactGroups with \ContactItem / \ContactHref)
 %%   #4 role / title     (optional, top-right brand color)
 %%   #5 summary          (optional paragraph below contact)
 %%
@@ -16,23 +16,23 @@
   {蔡~徐坤}                            % name (CN, with controlled spacing between characters)
   [Cai Xukun]                           % English alias / pinyin
   {%
-    \ContactItem{phone}{(+86)~133-3333-3333}%
-    \contactsep
-    \ContactHref{email}{mailto:caixukun@example.com}{caixukun@example.com}%
-    \contactsep
-    \ContactHref{github}{https://github.com/caixukun-dev}{github.com/caixukun-dev}%
-    \contactsep
-    \ContactHref{telegram}{https://t.me/cai_xukun}{@cai\_xukun}%
-    \contactgap
-    \ContactHref{website}{https://caixukun.dev}{caixukun.dev}%
-    \contactgap
-    \ContactItem{education}{清华大学}%
-    \contactsep
-    \ContactItem{major}{计算机科学与技术}%
-    \contactsep
-    \ContactHref{linkedin}{https://linkedin.com/in/cai-xukun}{linkedin.com/in/cai-xukun}%
-    \contactsep
-    \ContactItem{location}{北京}%
+    \ContactGroups
+      {%
+        \ContactItem{phone}{(+86)~133-3333-3333}%
+        \ContactHref{email}{mailto:caixukun@example.com}{caixukun@example.com}%
+        \ContactHref{github}{https://github.com/caixukun-dev}{github.com/caixukun-dev}%
+        \ContactHref{telegram}{https://t.me/cai_xukun}{@cai\_xukun}%
+        \ContactHref{website}{https://caixukun.dev}{caixukun.dev}%
+        \ContactHref{linkedin}{https://linkedin.com/in/cai-xukun}{linkedin.com/in/cai-xukun}%
+        \ContactHref{x}{https://x.com/cai_xukun}{x.com/cai\_xukun}%
+        \ContactHref{zhihu}{https://www.zhihu.com/people/cai-xukun}{zhihu.com/people/cai-xukun}%
+      }
+      {%
+        \ContactItem{education}{清华大学}%
+        \ContactItem{major}{计算机科学与技术}%
+        \ContactItem{profession}{算法工程师}%
+        \ContactItem{location}{北京}%
+      }%
   }
   [大模型 / 多模态方向]                 % role
   [%

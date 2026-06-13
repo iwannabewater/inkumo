@@ -13,6 +13,9 @@ ICON_DEFINITION_PATTERN = re.compile(r"^\\definePIcon\{([^{}]+)\}", re.MULTILINE
 ICON_USAGE_PATTERN = re.compile(
     r"\\(?:Tech|ContactItem|ContactHref|PIcon)\{([^{}]+)\}"
 )
+CONTACT_URL_PATTERN = re.compile(
+    r"\\ContactHref\{[^{}]+\}\{([^{}]+)\}\{"
+)
 FORBIDDEN_TRACKED_PATTERNS = (
     "*.pdf",
     "avatar.*",
@@ -112,6 +115,66 @@ def validate_footer(header_path, page_text_path):
         fail(f"missing header name in last-page signature: {name}")
 
 
+def validate_contact_flow(page_text_path):
+    lines = [
+        line.rstrip()
+        for line in read_text(page_text_path).splitlines()
+        if line.strip()
+    ]
+    first_group = (
+        "AlphaPhone",
+        "BravoEmail",
+        "CharlieGitHub",
+        "DeltaTelegram",
+        "EchoWebsite",
+        "FoxtrotLinkedIn",
+        "GolfX",
+        "HotelZhihu",
+    )
+    second_group = (
+        "IndiaUniversity",
+        "JulietComputerScience",
+        "KiloAlgorithmEngineer",
+        "LimaBeijing",
+        "MikeMultimodalResearch",
+        "NovemberResearchLab",
+    )
+
+    def item_line(item):
+        matches = [index for index, line in enumerate(lines) if item in line]
+        if len(matches) != 1:
+            fail(f"contact flow item must appear exactly once: {item}")
+        return matches[0]
+
+    first_lines = {item_line(item) for item in first_group}
+    second_lines = {item_line(item) for item in second_group}
+
+    if len(first_lines) < 2 or len(second_lines) < 2:
+        fail("contact flow fixture did not wrap both semantic groups")
+    if first_lines & second_lines:
+        fail("contact flow groups rendered on the same visual line")
+    if max(first_lines) >= min(second_lines):
+        fail("contact flow groups rendered out of order")
+    if not any("•" in line for line in lines):
+        fail("contact flow fixture contains no visible inline separators")
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("•") or stripped.endswith("•"):
+            fail(f"contact separator leaked to a wrapped edge: {stripped}")
+
+
+def validate_header_links(header_path, url_report_path):
+    expected = set(CONTACT_URL_PATTERN.findall(read_text(header_path)))
+    actual = set()
+    for line in read_text(url_report_path).splitlines():
+        columns = line.split(maxsplit=2)
+        if len(columns) == 3 and columns[0].isdigit():
+            actual.add(columns[2])
+    missing = sorted(expected - actual)
+    if missing:
+        fail("missing PDF contact links: " + ", ".join(missing))
+
+
 def write_icon_audit(registry_path, output_path):
     keys = registry_keys(registry_path)
     lines = [
@@ -162,6 +225,13 @@ def build_parser():
     footer.add_argument("--header", type=Path, required=True)
     footer.add_argument("--page-text", type=Path, required=True)
 
+    contact_flow = subparsers.add_parser("contact-flow")
+    contact_flow.add_argument("--page-text", type=Path, required=True)
+
+    links = subparsers.add_parser("links")
+    links.add_argument("--header", type=Path, required=True)
+    links.add_argument("--url-report", type=Path, required=True)
+
     icon_audit = subparsers.add_parser("icon-audit")
     icon_audit.add_argument("--registry", type=Path, required=True)
     icon_audit.add_argument("--output", type=Path, required=True)
@@ -179,6 +249,10 @@ def main():
         validate_source(args.root.resolve())
     elif args.command == "footer":
         validate_footer(args.header, args.page_text)
+    elif args.command == "contact-flow":
+        validate_contact_flow(args.page_text)
+    elif args.command == "links":
+        validate_header_links(args.header, args.url_report)
     elif args.command == "icon-audit":
         write_icon_audit(args.registry, args.output)
     elif args.command == "release":

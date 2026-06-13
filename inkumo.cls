@@ -9,7 +9,7 @@
 %%          XCharter (Latin, Bitstream Charter-derived, ships with TeX Live)
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{inkumo}[2026/06/13 v0.2.1 Inkumo - Kami-system resume class]
+\ProvidesClass{inkumo}[2026/06/15 v0.3.0 Inkumo - Kami-system resume class]
 
 %% ======================================================================
 %% Engine check
@@ -220,8 +220,9 @@
 %%   \mute{...}      — secondary text in olive
 %%   \tertiary{...}  — tertiary text in stone
 %%   \sep / \dotsep  — fixed-size separator with stable spacing
-%%   \contactsep     — slightly wider separator for the header contact strip
-%%   \contactgap     — quiet, break-friendly gap between contact groups
+%%   \contactsep     — line-safe separator for custom contact flows
+%%   \ContactGroup   — contact items with automatic line-safe separators
+%%   \ContactGroups  — two independently wrapping contact groups
 %%   \pipesep        — vertical-pipe separator (rare)
 %% ======================================================================
 \newcommand{\hl}[1]{{\color{kami@brand}#1}}
@@ -233,16 +234,50 @@
 }
 \newcommand{\sep}{\nobreak\hspace{0.42em}\inkumo@dot\hspace{0.42em}\ignorespaces}
 \newcommand{\contactsep}{%
-  \nobreak\hspace{0.56em}\inkumo@dot\hspace{0.56em}\penalty0\ignorespaces%
-}
-\newcommand{\contactgap}{%
-  % The kern leaves a stable breakpoint after hyperlink boundary nodes.
-  \nobreak\hspace{1.05em}\kern1pt\penalty0\ignorespaces%
+  \discretionary{}{}{%
+    \hbox{\hspace{0.56em}\inkumo@dot\hspace{0.56em}}%
+  }%
+  \ignorespaces
 }
 \let\dotsep\sep
 \newcommand{\pipesep}{\,{\color{kami@stone}|}\,}
-\newcommand{\ContactItem}[2]{\mbox{\PIcon{#1}\hspace{0.22em}}#2}
-\newcommand{\inkumo@contactlabel}[1]{\seqsplit{#1}}
+\newif\ifinkumo@contactgroup
+\newif\ifinkumo@contactfirst
+\newlength{\inkumo@contactgroupskip}
+\setlength{\inkumo@contactgroupskip}{1.4pt}
+\newcommand{\inkumo@contactprefix}{%
+  \ifinkumo@contactgroup
+    \ifinkumo@contactfirst
+      \inkumo@contactfirstfalse
+    \else
+      \contactsep
+    \fi
+  \fi
+}
+\newcommand{\ContactGroup}[1]{%
+  \begingroup
+    \inkumo@contactgrouptrue
+    \inkumo@contactfirsttrue
+    #1%
+    \par
+  \endgroup
+}
+\newcommand{\ContactGroups}[2]{%
+  \ContactGroup{#1}%
+  \vspace{\inkumo@contactgroupskip}\noindent
+  \ContactGroup{#2}%
+}
+\newcommand{\ContactItem}[2]{%
+  \inkumo@contactprefix
+  \mbox{\PIcon{#1}\hspace{0.22em}}\nobreak#2%
+}
+\newcommand{\inkumo@contactlabel}[1]{%
+  \begingroup
+    % Prefer item boundaries; split inside a long profile label only as fallback.
+    \def\seqinsert{\penalty800\hspace{0pt plus 0.02em}}%
+    \seqsplit{#1}%
+  \endgroup
+}
 \NewDocumentCommand{\ContactHref}{m m m}{%
   \ContactItem{#1}{\href{#2}{\inkumo@contactlabel{#3}}}%
 }
@@ -414,12 +449,13 @@
 %%
 %%   \inkumoheader{Name}
 %%     [English alias]                   ← optional alias next to name
-%%     {Contact line composed inline}
+%%     {Contact details, preferably \ContactGroups{...}{...}}
 %%     [Right-aligned role/title]        ← optional, brand color
 %%     [Summary paragraph]                ← optional
 %%
-%% The contact line is freeform. Use \ContactItem{phone}{...}\contactsep ...
-%% inside it; see lib/icons.tex for the full glyph registry.
+%% \ContactGroups keeps two semantic rows independent while allowing each row
+%% to wrap. Its item separators disappear at line breaks. The contact argument
+%% remains freeform for backward compatibility.
 %% ======================================================================
 \newif\ifinkumo@avatar
 \newlength{\inkumo@avatarsize}

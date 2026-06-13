@@ -11,6 +11,7 @@ TEXT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/inkumo-pdf-check.XXXXXX")"
 trap 'rm -rf "$TEXT_DIR"' EXIT
 
 inkumo_require_command pdftoppm
+inkumo_require_command pdftotext
 inkumo_require_command python3
 inkumo_require_command rg
 inkumo_require_command xelatex
@@ -52,6 +53,12 @@ python3 "$ROOT_DIR/scripts/validate.py" icon-audit \
   --output "$icon_audit_tex"
 run_xelatex "icon-registry-audit" 2 "$icon_audit_tex"
 assert_smoke_log "icon-registry-audit"
+
+run_xelatex "contact-groups" 2 "$ROOT_DIR/tests/fixtures/contact-groups.tex"
+assert_smoke_log "contact-groups"
+pdftotext -layout "$TEXT_DIR/contact-groups.pdf" "$TEXT_DIR/contact-groups.txt"
+python3 "$ROOT_DIR/scripts/validate.py" contact-flow \
+  --page-text "$TEXT_DIR/contact-groups.txt"
 
 run_xelatex "avatar-demo" 1 "$ROOT_DIR/tests/fixtures/avatar-demo.tex"
 assert_smoke_log "avatar-demo"

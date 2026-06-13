@@ -85,7 +85,13 @@ import sys
 from pathlib import Path
 
 icons = {item["slug"]: item for item in json.loads(Path(sys.argv[1]).read_text())}
-required = {"etcd": "ed88", "codemirror": "ec41", "nvidia": "f1f4"}
+required = {
+    "etcd": "ed88",
+    "codemirror": "ec41",
+    "nvidia": "f1f4",
+    "x": "f70d",
+    "zhihu": "f752",
+}
 missing = []
 for slug, code in required.items():
     if slug not in icons or icons[slug].get("code", "").lower() != code:

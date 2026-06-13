@@ -30,8 +30,8 @@ layout-ready sample and should be replaced with personal details before use.
   unchanged.
 - A named icon API with codepoint bindings and public mappings isolated in
   separate modules.
-- Break-friendly contact flow and relaxed row text tuned for long names, roles,
-  profile labels, and mixed Chinese / English content.
+- Two semantic, independently wrapping header groups with separators that
+  disappear cleanly at line boundaries.
 - SHA-256 verified local retrieval for untracked font and icon assets.
 - GitHub Actions validation for the PDF, embedded fonts, page markers, footer,
   log cleanliness, and icon mappings.
@@ -153,13 +153,17 @@ Update the files under `content/` first:
 | `content/projects.tex` | project entries |
 | `content/campus.tex` | campus experience |
 
-Use `\ContactHref{key}{url}{label}` for email, website, profile, and handle
-labels in the header. It keeps the icon attached to the label while allowing
-long labels and the contact line to wrap cleanly. Keep contact items in one
-continuous sequence instead of inserting manual `\\` breaks, because the
-available width changes between text-only and avatar headers. Use
-`\contactgap` for a quiet, break-friendly boundary between logical contact
-groups; use `\contactsep` between items within a group.
+Use `\ContactGroups{primary}{profile}` to keep contact and social links
+separate from education, profession, and location metadata. Each group wraps
+independently in text-only and avatar headers. Place `\ContactItem` and
+`\ContactHref` calls directly inside a group; Inkumo inserts the separators
+automatically and removes them at wrapped line edges. Do not add manual `\\`
+breaks or `\contactsep` calls inside `\ContactGroups`.
+
+`\ContactHref{key}{url}{label}` keeps each icon attached to its clickable
+label while allowing long profile labels to wrap. The lower-level
+`\contactsep` command remains available for custom legacy flows and uses the
+same line-safe separator behavior.
 
 If a profile photo is appropriate for your target market, call
 `\inkumoavatar` before `\inkumoheader` in `content/header.tex`:
@@ -202,7 +206,7 @@ Inkumo renders font-based icons only.
 |---|---|---|
 | Font Awesome 5 Free | TeX Live package | contact and generic icons |
 | Devicon | `assets/devicon/devicon.ttf` | languages and developer tools |
-| Simple Icons | `assets/simple-icons/SimpleIcons.ttf` | etcd, CodeMirror, and NVIDIA / CUDA |
+| Simple Icons | `assets/simple-icons/SimpleIcons.ttf` | X, Zhihu, etcd, CodeMirror, and NVIDIA / CUDA |
 
 Technology keys stay readable at the content boundary:
 
@@ -211,6 +215,8 @@ Technology keys stay readable at the content boundary:
 \definePIcon{go}{\DeviconGo}
 \definePIcon{etcd}{\SimpleIconEtcd}
 \definePIcon{cuda}{\SimpleIconNvidia}
+\definePIcon{x}{\SimpleIconX}
+\definePIcon{zhihu}{\SimpleIconZhihu}
 ```
 
 Public mappings live in `lib/icon-registry.tex`; font codepoint bindings stay
@@ -247,9 +253,13 @@ profile photos.
 - Every page has a centered page marker.
 - The copyright footer appears only on the last page.
 - The footer name matches `content/header.tex`.
+- Every `\ContactHref` URL in the sample header exists as a clickable PDF
+  annotation.
 - Every `\Tech{...}` key used in `content/` is registered.
 - The optional profile-photo header compiles with a real image and gracefully
   falls back when an avatar path is missing.
+- Both semantic contact groups wrap in an isolated header fixture without
+  leading or trailing separators on wrapped lines.
 - PDF, PNG, and JPEG avatar paths compile through isolated fixtures.
 - A non-positive avatar size warns and falls back to the text-only header.
 

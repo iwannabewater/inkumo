@@ -4,10 +4,16 @@ All notable changes to Inkumo are recorded here.
 
 ## Unreleased
 
-- Keep release-asset compilation isolated so `make release-assets` writes only
+## 0.3.0 - 2026-06-15
+
+- Reworked the header into independent contact/social and profile metadata
+  groups with automatic separators that disappear at wrapped line edges.
+- Added LinkedIn, X, and Zhihu profile examples plus an algorithm-engineer
+  profession item, backed by native brand and role icon mappings.
+- Added regression checks for wrapped contact separators and clickable PDF
+  annotations.
+- Kept release-asset compilation isolated so `make release-assets` writes only
   the two final PDFs to `dist/`.
-- Let header contact groups reflow between text-only and avatar layouts without
-  isolating the final profile link or leaving separators at wrapped edges.
 
 ## 0.2.1 - 2026-06-13
 

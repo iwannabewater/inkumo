@@ -45,7 +45,7 @@ resume.
 
 Inkumo can download the Simple Icons font package to `assets/simple-icons/` for
 brand glyphs not covered by Devicon, including etcd, CodeMirror, and
-NVIDIA / CUDA.
+NVIDIA / CUDA, X, and Zhihu.
 The Simple Icons package is distributed under CC0-1.0; `make setup` downloads
 the package license, disclaimer, and metadata alongside the local font file.
 

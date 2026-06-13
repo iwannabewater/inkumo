@@ -41,6 +41,11 @@ inkumo_assert_clean_log \
   "$INKUMO_LOG_PROBLEM_PATTERN" \
   "$DOCUMENT.log contains warnings or layout issues"
 
+pdfinfo -url "$PDF" >"$TEXT_DIR/urls.txt"
+python3 "$ROOT_DIR/scripts/validate.py" links \
+  --header "$ROOT_DIR/content/header.tex" \
+  --url-report "$TEXT_DIR/urls.txt"
+
 pdffonts "$PDF" | rg -q "devicon" \
   || inkumo_fail "Devicon font is not embedded in $DOCUMENT.pdf"
 pdffonts "$PDF" | rg -q "SimpleIcons" \

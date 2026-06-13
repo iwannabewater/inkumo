@@ -1,0 +1,29 @@
+\documentclass{inkumo}
+\input{lib/icons.tex}
+
+\begin{document}
+\inkumoheader
+  {联系人分组}
+  [Contact Flow]
+  {%
+    \ContactGroups
+      {%
+        \ContactItem{phone}{AlphaPhone}%
+        \ContactHref{email}{mailto:bravo@example.com}{BravoEmail}%
+        \ContactHref{github}{https://example.com/github}{CharlieGitHub}%
+        \ContactHref{telegram}{https://example.com/telegram}{DeltaTelegram}%
+        \ContactHref{website}{https://example.com}{EchoWebsite}%
+        \ContactHref{linkedin}{https://example.com/linkedin}{FoxtrotLinkedIn}%
+        \ContactHref{x}{https://example.com/x}{GolfX}%
+        \ContactHref{zhihu}{https://example.com/zhihu}{HotelZhihu}%
+      }
+      {%
+        \ContactItem{education}{IndiaUniversity}%
+        \ContactItem{major}{JulietComputerScience}%
+        \ContactItem{profession}{KiloAlgorithmEngineer}%
+        \ContactItem{location}{LimaBeijing}%
+        \ContactItem{research}{MikeMultimodalResearch}%
+        \ContactItem{company}{NovemberResearchLab}%
+      }%
+  }
+\end{document}

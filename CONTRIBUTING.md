@@ -25,10 +25,10 @@ avatar support, or sample content.
 - Keep `lib/icons.tex` as the public facade; codepoints belong in
   `lib/icon-glyphs.tex` and key mappings in `lib/icon-registry.tex`.
 - Use `\ContactHref` for clickable header labels so long labels and the contact
-  line can wrap cleanly without detaching icons from labels. Keep the contact
-  sequence flow-based; do not add manual row breaks that assume one header
-  width. Use `\contactgap` between logical groups and `\contactsep` within a
-  group.
+  line can wrap cleanly without detaching icons from labels. Compose the header
+  with `\ContactGroups{primary}{profile}` so contact/social links and profile
+  metadata wrap independently. Items inside each group receive automatic
+  line-safe separators; do not add manual row breaks or separator commands.
 - Use `\inkumoavatar` for optional profile photos. Keep personal image files
   local by default and verify both avatar and text-only headers after layout
   changes.
