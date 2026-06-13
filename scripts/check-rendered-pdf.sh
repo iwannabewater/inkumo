@@ -13,8 +13,9 @@ case "$DOCUMENT" in
     ;;
 esac
 
-PDF="$ROOT_DIR/$DOCUMENT.pdf"
-LOG="$ROOT_DIR/$DOCUMENT.log"
+DOCUMENT_DIR="${2:-$ROOT_DIR}"
+PDF="$DOCUMENT_DIR/$DOCUMENT.pdf"
+LOG="$DOCUMENT_DIR/$DOCUMENT.log"
 TEXT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/inkumo-render-check.XXXXXX")"
 trap 'rm -rf "$TEXT_DIR"' EXIT
 

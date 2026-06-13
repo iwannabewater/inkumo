@@ -110,7 +110,7 @@ Use WSL and follow the Debian / Ubuntu commands.
 | `make lint` | Validate source invariants without compiling the PDF |
 | `make test` | Build if needed and validate `resume.pdf` |
 | `make clean && make test` | Rebuild from a clean tree and validate |
-| `make release-assets VERSION=vX.Y.Z` | Build validated text-only and avatar release PDFs |
+| `make release-assets VERSION=vX.Y.Z` | Build validated text-only and avatar PDFs in `dist/` |
 | `make release-upload VERSION=vX.Y.Z` | Upload both PDFs and verify the remote checksums |
 | `make watch` | Rebuild on file changes with `latexmk` |
 | `make clean` | Remove LaTeX byproducts |
@@ -265,8 +265,8 @@ make release-upload VERSION=vX.Y.Z
 ```
 
 The command requires a clean tracked worktree at the tagged commit. It rebuilds
-and validates both PDFs, uploads them with stable names, downloads them again,
-and compares SHA-256 checksums.
+and validates both PDFs in an isolated temporary directory, uploads them with
+stable names, downloads them again, and compares SHA-256 checksums.
 
 See `CONTRIBUTING.md` for the clean-build and submission checklist, and
 `CHANGELOG.md` for notable changes.

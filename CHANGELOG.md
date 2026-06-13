@@ -4,6 +4,9 @@ All notable changes to Inkumo are recorded here.
 
 ## Unreleased
 
+- Keep release-asset compilation isolated so `make release-assets` writes only
+  the two final PDFs to `dist/`.
+
 ## 0.2.1 - 2026-06-13
 
 - Refactored header composition and validation tooling into focused,

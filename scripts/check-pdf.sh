@@ -6,6 +6,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT_DIR/scripts/lib/common.sh"
 
+DOCUMENT_DIR="${1:-$ROOT_DIR}"
 TEXT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/inkumo-pdf-check.XXXXXX")"
 trap 'rm -rf "$TEXT_DIR"' EXIT
 
@@ -43,7 +44,7 @@ assert_smoke_log() {
     "$job_name log contains warnings or layout issues"
 }
 
-bash "$ROOT_DIR/scripts/check-rendered-pdf.sh" resume
+bash "$ROOT_DIR/scripts/check-rendered-pdf.sh" resume "$DOCUMENT_DIR"
 
 icon_audit_tex="$TEXT_DIR/icon-registry-audit.tex"
 python3 "$ROOT_DIR/scripts/validate.py" icon-audit \
