@@ -4,6 +4,15 @@ All notable changes to Inkumo are recorded here.
 
 ## Unreleased
 
+## 0.2.1 - 2026-06-13
+
+- Refactored header composition and validation tooling into focused,
+  single-purpose helpers and explicit PDF fixtures.
+- Added local release tooling that builds, uploads, and checksum-verifies both
+  text-only and avatar PDF assets without tracking the personal avatar file.
+- Expanded avatar guidance and validation for PDF, PNG, JPG, and JPEG inputs,
+  including non-positive size fallback coverage.
+
 ## 0.2.0 - 2026-06-13
 
 - Added an optional `\inkumoavatar` header photo interface with PDF validation

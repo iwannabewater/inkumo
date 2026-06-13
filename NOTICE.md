@@ -62,6 +62,9 @@ paths by default.
 
 Users are responsible for image rights, privacy, and consent before publishing
 or distributing a generated resume. Generated PDFs may embed the profile photo.
+The avatar PDF attached to an Inkumo release is built from the maintainer's
+ignored local `content/avatar.jpeg`; the source image is not included in the
+repository or source archive.
 
 ## Local Font Artifacts
 

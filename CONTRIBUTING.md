@@ -29,6 +29,9 @@ avatar support, or sample content.
 - Use `\inkumoavatar` for optional profile photos. Keep personal image files
   local by default and verify both avatar and text-only headers after layout
   changes.
+- Keep shell orchestration, structured parsing, and TeX fixtures separate:
+  `scripts/*.sh` coordinates commands, `scripts/validate.py` parses repository
+  data, and `tests/fixtures/` owns isolated TeX documents.
 - Preserve the restrained paper-and-ink visual language unless a change has a
   documented design purpose.
 
@@ -38,6 +41,21 @@ avatar support, or sample content.
 digests. Do not commit downloaded fonts, icon font artifacts, or rendered
 PDFs. Review `NOTICE.md` before publishing generated material that embeds
 licensed fonts or brand glyphs.
+
+## Releases
+
+Every release publishes `resume.pdf` and `resume-avatar.pdf`. The avatar build
+uses the ignored local file `content/avatar.jpeg`; never add that file to Git.
+
+After versioning, committing, tagging, and creating the GitHub Release, run:
+
+```bash
+make release-upload VERSION=vX.Y.Z
+```
+
+The command refuses to publish from a dirty tracked worktree or from a commit
+that does not match the tag. It validates both PDFs and verifies the downloaded
+release assets against the local SHA-256 checksums.
 
 ## Pull Requests
 

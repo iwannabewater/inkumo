@@ -9,7 +9,7 @@
 %%          XCharter (Latin, Bitstream Charter-derived, ships with TeX Live)
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{inkumo}[2026/06/13 v0.2.0 Inkumo - Kami-system resume class]
+\ProvidesClass{inkumo}[2026/06/13 v0.2.1 Inkumo - Kami-system resume class]
 
 %% ======================================================================
 %% Engine check
@@ -101,10 +101,6 @@
 \urlstyle{same}
 
 \newcommand{\inkumo@author}{}
-\newif\ifinkumo@avatar
-\newlength{\inkumo@avatarsize}
-\setlength{\inkumo@avatarsize}{24mm}
-\newcommand{\inkumo@avatarpath}{}
 \newcommand{\inkumo@twodigits}[1]{\ifnum#1<10 0\fi\number#1}
 \newcommand{\inkumo@compiledate}{%
   \number\year-\inkumo@twodigits{\month}-\inkumo@twodigits{\day}%
@@ -290,43 +286,41 @@
 %%   \dottedhairline  — dashed leader in border        (between data rows)
 %%   \warmhairline    — 0.5pt peach (kami@headerline)  (under header only)
 %% ======================================================================
-\newcommand{\entryleadline}{%
-  \par\addvspace{0.25mm}%
-  \noindent
+\newcommand{\inkumo@dashedhairline}[3]{%
   \makebox[0pt][l]{\tikz{%
     \draw[
-      dash pattern={on 1.1pt off 1.7pt},
-      color=kami@brand!48!kami@border,
-      line width=0.45pt,
+      dash pattern={#1},
+      color=#2,
+      line width=#3,
       line cap=round,
     ] (0,0) -- (\linewidth,0);%
   }}%
+}
+\newcommand{\entryleadline}{%
+  \par\addvspace{0.25mm}%
+  \noindent
+  \inkumo@dashedhairline
+    {on 1.1pt off 1.7pt}
+    {kami@brand!48!kami@border}
+    {0.45pt}%
   \par\addvspace{0.35mm}%
 }
 \newcommand{\dottedhairline}{%
   \par\addvspace{0.8mm}%
   \noindent
-  \makebox[0pt][l]{\tikz{%
-    \draw[
-      dash pattern={on 0.4pt off 1.6pt},
-      color=kami@border,
-      line width=0.5pt,
-      line cap=round,
-    ] (0,0) -- (\linewidth,0);%
-  }}%
+  \inkumo@dashedhairline
+    {on 0.4pt off 1.6pt}
+    {kami@border}
+    {0.5pt}%
   \par\addvspace{0.5mm}%
 }
 \newcommand{\educationhairline}{%
   \par\addvspace{0.25mm}%
   \noindent
-  \makebox[0pt][l]{\tikz{%
-    \draw[
-      dash pattern={on 0.35pt off 1.75pt},
-      color=kami@border,
-      line width=0.45pt,
-      line cap=round,
-    ] (0,0) -- (\linewidth,0);%
-  }}%
+  \inkumo@dashedhairline
+    {on 0.35pt off 1.75pt}
+    {kami@border}
+    {0.45pt}%
   \par\addvspace{0.65mm}%
 }
 \newcommand{\warmhairline}{%
@@ -355,10 +349,13 @@
 \@inkumo@firstcampustrue
 \@inkumo@firstedutrue
 
-\NewDocumentCommand{\inkumosection}{m o}{%
+\newcommand{\inkumo@resetentryflags}{%
   \@inkumo@firstprojecttrue
   \@inkumo@firstcampustrue
   \@inkumo@firstedutrue
+}
+\NewDocumentCommand{\inkumosection}{m o}{%
+  \inkumo@resetentryflags
   \Needspace{22mm}%
   \par\addvspace{4.5mm}%
   \noindent
@@ -404,10 +401,11 @@
 %% ======================================================================
 %% Header
 %%
-%%   \inkumoavatar[24mm]{path/to/square-photo.pdf}
+%%   \inkumoavatar[24mm]{content/avatar.jpeg}
 %%     Optional. Call before \inkumoheader to place a restrained profile
-%%     photo at the upper right. Missing files warn and fall back to the
-%%     text-only header.
+%%     photo at the upper right. PDF, PNG, JPG, and JPEG are supported;
+%%     square or near-square headshots are recommended. Missing files or
+%%     non-positive sizes warn and fall back to the text-only header.
 %%
 %%   \inkumoheader{Name}
 %%     [English alias]                   ← optional alias next to name
@@ -418,14 +416,28 @@
 %% The contact line is freeform. Use \ContactItem{phone}{...}\contactsep ...
 %% inside it; see lib/icons.tex for the full glyph registry.
 %% ======================================================================
+\newif\ifinkumo@avatar
+\newlength{\inkumo@avatarsize}
+\setlength{\inkumo@avatarsize}{24mm}
+\newcommand{\inkumo@avatarpath}{}
+\newcommand{\inkumo@disableavatar}{%
+  \global\inkumo@avatarfalse
+  \gdef\inkumo@avatarpath{}%
+}
 \NewDocumentCommand{\inkumoavatar}{O{24mm} m}{%
   \IfFileExists{#2}{%
     \setlength{\inkumo@avatarsize}{#1}%
-    \gdef\inkumo@avatarpath{#2}%
-    \inkumo@avatartrue
+    \ifdim\inkumo@avatarsize>0pt
+      \global\inkumo@avatarsize=\inkumo@avatarsize
+      \gdef\inkumo@avatarpath{#2}%
+      \global\inkumo@avatartrue
+    \else
+      \ClassWarningNoLine{inkumo}{Avatar size `#1' must be positive; ignoring \string\inkumoavatar}%
+      \inkumo@disableavatar
+    \fi
   }{%
     \ClassWarningNoLine{inkumo}{Avatar file `#2' not found; ignoring \string\inkumoavatar}%
-    \inkumo@avatarfalse
+    \inkumo@disableavatar
   }%
 }
 \newcommand{\inkumo@avatarbox}{%
@@ -451,63 +463,54 @@
     ] (inkumoavatar) {};%
   \end{tikzpicture}%
 }
+\newcommand{\inkumo@headeridentity}[4]{%
+  \inkumo@flowrow{#1}{%
+    {\fontsize{26pt}{28pt}\selectfont\bfseries\color{kami@nearblack}#2}%
+    \IfValueT{#3}{%
+      \hspace{2.6mm}%
+      {\fontsize{13pt}{16pt}\selectfont\color{kami@stone}#3}%
+    }%
+  }{%
+    \IfValueT{#4}{%
+      {\fontsize{10.5pt}{13pt}\selectfont\bfseries\color{kami@brand}#4}%
+    }%
+  }%
+}
+\newcommand{\inkumo@headerdetails}[2]{%
+  \par\vspace{2.2mm}%
+  \noindent
+  {\fontsize{9.2pt}{12.5pt}\selectfont\color{kami@stone}\inkumo@contacttext #1}%
+  \par\vspace{0.6mm}%
+  \IfValueT{#2}{%
+    \par\addvspace{1.6mm}%
+    \noindent
+    {\fontsize{9.2pt}{13.2pt}\selectfont\color{kami@nearblack}#2}%
+    \par\addvspace{0.4mm}%
+  }%
+}
+\newcommand{\inkumo@headerwithavatar}[5]{%
+  \begin{minipage}[t]{\dimexpr\linewidth-\inkumo@avatarsize-7mm\relax}%
+    \inkumo@headeridentity{42mm}{#1}{#2}{#4}%
+    \inkumo@headerdetails{#3}{#5}%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{\inkumo@avatarsize}%
+    \raggedleft\inkumo@avatarbox
+  \end{minipage}%
+  \par\vspace{0.6mm}%
+}
+\newcommand{\inkumo@headerwithoutavatar}[5]{%
+  \inkumo@headeridentity{54mm}{#1}{#2}{#4}%
+  \inkumo@headerdetails{#3}{#5}%
+}
 \NewDocumentCommand{\inkumoheader}{m o m o o}{%
   \gdef\inkumo@author{#1}%
   \hypersetup{pdfauthor={#1}}%
   \par\noindent
   \ifinkumo@avatar
-    \begin{minipage}[t]{\dimexpr\linewidth-\inkumo@avatarsize-7mm\relax}%
-      \inkumo@flowrow{42mm}{%
-        {\fontsize{26pt}{28pt}\selectfont\bfseries\color{kami@nearblack}#1}%
-        \IfValueT{#2}{%
-          \hspace{2.6mm}%
-          {\fontsize{13pt}{16pt}\selectfont\color{kami@stone}#2}%
-        }%
-      }{%
-        \IfValueT{#4}{%
-          {\fontsize{10.5pt}{13pt}\selectfont\bfseries\color{kami@brand}#4}%
-        }%
-      }%
-      \par\vspace{2.2mm}%
-      \noindent
-      {\fontsize{9.2pt}{12.5pt}\selectfont\color{kami@stone}\inkumo@contacttext #3}%
-      \par\vspace{0.6mm}%
-      \IfValueT{#5}{%
-        \par\addvspace{1.6mm}%
-        \noindent
-        {\fontsize{9.2pt}{13.2pt}\selectfont\color{kami@nearblack}#5}%
-        \par\addvspace{0.4mm}%
-      }%
-    \end{minipage}%
-    \hfill
-    \begin{minipage}[t]{\inkumo@avatarsize}%
-      \raggedleft\inkumo@avatarbox
-    \end{minipage}%
-    \par\vspace{0.6mm}%
+    \inkumo@headerwithavatar{#1}{#2}{#3}{#4}{#5}%
   \else
-    \inkumo@flowrow{54mm}{%
-      {\fontsize{26pt}{28pt}\selectfont\bfseries\color{kami@nearblack}#1}%
-      \IfValueT{#2}{%
-        \hspace{2.6mm}%
-        {\fontsize{13pt}{16pt}\selectfont\color{kami@stone}#2}%
-      }%
-    }{%
-      \IfValueT{#4}{%
-        {\fontsize{10.5pt}{13pt}\selectfont\bfseries\color{kami@brand}#4}%
-      }%
-    }%
-    \par\vspace{2.2mm}%
-    %% Contact line
-    \noindent
-    {\fontsize{9.2pt}{12.5pt}\selectfont\color{kami@stone}\inkumo@contacttext #3}%
-    \par\vspace{0.6mm}%
-    %% Optional summary
-    \IfValueT{#5}{%
-      \par\addvspace{1.6mm}%
-      \noindent
-      {\fontsize{9.2pt}{13.2pt}\selectfont\color{kami@nearblack}#5}%
-      \par\addvspace{0.4mm}%
-    }%
+    \inkumo@headerwithoutavatar{#1}{#2}{#3}{#4}{#5}%
   \fi
   \warmhairline
 }

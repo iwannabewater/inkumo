@@ -1,0 +1,16 @@
+\documentclass{inkumo}
+\input{lib/icons.tex}
+\providecommand{\InkumoAvatarFixture}{avatar-demo.jpeg}
+\inkumoavatar[0pt]{\InkumoAvatarFixture}
+
+\begin{document}
+\inkumoheader
+  {Invalid Avatar Size}
+  {%
+    \ContactHref{email}{mailto:invalid-avatar@example.com}{invalid-avatar@example.com}%
+    \contactsep
+    \ContactItem{location}{Beijing}%
+  }
+  [Research Engineer]
+  [A non-positive avatar size should warn and fall back to the text-only header.]
+\end{document}

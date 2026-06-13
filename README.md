@@ -35,6 +35,8 @@ layout-ready sample and should be replaced with personal details before use.
 - SHA-256 verified local retrieval for untracked font and icon assets.
 - GitHub Actions validation for the PDF, embedded fonts, page markers, footer,
   log cleanliness, and icon mappings.
+- Local release tooling for checksum-verified text-only and avatar PDF assets
+  without committing personal photos or generated documents.
 
 ## Quick Start
 
@@ -54,14 +56,16 @@ checksums. `make lint` runs source checks that do not need a TeX runtime.
 
 | Tool | Purpose |
 |---|---|
+| `git` | source checkout and tracked-asset validation |
 | `make` | build entry point |
 | `xelatex` | PDF rendering |
 | `curl` or `wget` | asset downloads |
 | `tar` | Simple Icons package extraction |
 | `python3` | checksum and metadata checks |
-| `pdfinfo`, `pdffonts`, `pdftotext` | PDF validation |
+| `pdfinfo`, `pdffonts`, `pdftotext`, `pdftoppm` | PDF validation and avatar fixtures |
 | `rg` | source and log validation |
 | `latexmk` | optional live rebuilds |
+| `gh` | optional GitHub Release publishing |
 
 ### Debian / Ubuntu
 
@@ -106,9 +110,11 @@ Use WSL and follow the Debian / Ubuntu commands.
 | `make lint` | Validate source invariants without compiling the PDF |
 | `make test` | Build if needed and validate `resume.pdf` |
 | `make clean && make test` | Rebuild from a clean tree and validate |
+| `make release-assets VERSION=vX.Y.Z` | Build validated text-only and avatar release PDFs |
+| `make release-upload VERSION=vX.Y.Z` | Upload both PDFs and verify the remote checksums |
 | `make watch` | Rebuild on file changes with `latexmk` |
 | `make clean` | Remove LaTeX byproducts |
-| `make distclean` | Run `make clean` and remove `resume.pdf` |
+| `make distclean` | Run `make clean` and remove rendered and release PDFs |
 
 ## Repository Layout
 
@@ -123,7 +129,12 @@ Use WSL and follow the Debian / Ubuntu commands.
 | `scripts/fetch-fonts.sh` | verified TsangerJinKai02 retrieval |
 | `scripts/fetch-icons.sh` | verified Devicon and Simple Icons retrieval |
 | `scripts/check-source.sh` | source-level validation |
-| `scripts/check-pdf.sh` | structural PDF validation |
+| `scripts/check-rendered-pdf.sh` | validation for one rendered PDF and log |
+| `scripts/check-pdf.sh` | orchestration for PDF and fixture smoke tests |
+| `scripts/validate.py` | structured source, footer, icon, and release checks |
+| `scripts/build-release-assets.sh` | local two-PDF release build |
+| `scripts/publish-release-assets.sh` | GitHub upload and checksum readback |
+| `tests/fixtures/` | isolated TeX fixtures for icon and avatar behavior |
 | `assets/brand/inkumo-mark.svg` | first-party README mark |
 | `fonts/`, `assets/devicon/`, `assets/simple-icons/` | local third-party artifacts and tracked source notes |
 
@@ -150,14 +161,14 @@ If a profile photo is appropriate for your target market, call
 `\inkumoavatar` before `\inkumoheader` in `content/header.tex`:
 
 ```latex
-\inkumoavatar[24mm]{content/avatar.pdf}
+\inkumoavatar[24mm]{content/avatar.jpeg}
 ```
 
 The photo is optional. Without this command, the header renders exactly as a
-text-only resume. Use a square PDF, PNG, or JPG and keep the displayed size
-around 22-26 mm. Keep the file local unless you intend to publish personal image
-data, and avoid using it as an icon system. The default `.gitignore` excludes
-common local avatar paths.
+text-only resume. PDF, PNG, JPG, and JPEG files are supported. Use a square or
+near-square headshot and keep the displayed size around 22-26 mm. Keep the file
+local unless you intend to publish personal image data, and avoid using it as
+an icon system. The default `.gitignore` excludes common local avatar paths.
 
 Detailed project or research entries use `\Project`:
 
@@ -235,6 +246,27 @@ profile photos.
 - Every `\Tech{...}` key used in `content/` is registered.
 - The optional profile-photo header compiles with a real image and gracefully
   falls back when an avatar path is missing.
+- PDF, PNG, and JPEG avatar paths compile through isolated fixtures.
+- A non-positive avatar size warns and falls back to the text-only header.
+
+## Releases
+
+Each GitHub Release contains two locally compiled artifacts:
+
+- `resume.pdf`: the default text-only resume.
+- `resume-avatar.pdf`: the same resume with `content/avatar.jpeg`.
+
+The personal avatar and generated PDFs remain ignored by Git. Before publishing
+a release, update the class version and dated changelog section, commit and tag
+the release, create the GitHub Release, then run:
+
+```bash
+make release-upload VERSION=vX.Y.Z
+```
+
+The command requires a clean tracked worktree at the tagged commit. It rebuilds
+and validates both PDFs, uploads them with stable names, downloads them again,
+and compares SHA-256 checksums.
 
 See `CONTRIBUTING.md` for the clean-build and submission checklist, and
 `CHANGELOG.md` for notable changes.

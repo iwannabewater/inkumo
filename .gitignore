@@ -19,6 +19,8 @@
 .idea/
 .DS_Store
 Thumbs.db
+__pycache__/
+*.py[cod]
 
 # Local agent files may contain private paths, credentials, or implementation notes.
 AGENTS.md
@@ -45,6 +47,7 @@ avatar.*
 content/avatar.*
 assets/avatar.*
 local/
+dist/
 
 # Rendered PDFs may embed local personal-use font subsets.
 *.pdf

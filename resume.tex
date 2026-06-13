@@ -16,6 +16,11 @@
 %% Platform icon registry. Edit lib/icons.tex to swap any glyph.
 \input{lib/icons.tex}
 
+%% Build tools may inject optional header configuration without changing the
+%% sample content. Normal builds leave this hook empty.
+\providecommand{\InkumoHeaderSetup}{}
+\InkumoHeaderSetup
+
 \begin{document}
 
 \input{content/header.tex}
