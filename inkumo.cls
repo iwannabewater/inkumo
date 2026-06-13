@@ -9,7 +9,7 @@
 %%          XCharter (Latin, Bitstream Charter-derived, ships with TeX Live)
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{inkumo}[2026/05/05 v0.1.0 Inkumo - Kami-system resume class]
+\ProvidesClass{inkumo}[2026/06/13 v0.2.0 Inkumo - Kami-system resume class]
 
 %% ======================================================================
 %% Engine check
