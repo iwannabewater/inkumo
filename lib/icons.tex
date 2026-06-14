@@ -57,6 +57,13 @@
     \faQuestionCircle
   \fi%
 }
+\NewDocumentCommand{\SIconCompact}{m}{%
+  \ifinkumo@simpleicons%
+    {\tracinglostchars=0\raisebox{-0.04ex}{\scalebox{0.95}{{\inkumoSimpleIcons\symbol{"#1}}}}}%
+  \else%
+    \faQuestionCircle
+  \fi%
+}
 \NewDocumentCommand{\TextPIcon}{m}{%
   \tikz[baseline=(x.base)]{%
     \node[

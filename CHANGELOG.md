@@ -4,6 +4,9 @@ All notable changes to Inkumo are recorded here.
 
 ## Unreleased
 
+- Balanced X and Zhihu header icon sizing against the surrounding contact
+  icons.
+
 ## 0.3.0 - 2026-06-15
 
 - Reworked the header into independent contact/social and profile metadata
