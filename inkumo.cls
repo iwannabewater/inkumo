@@ -221,6 +221,7 @@
 %%   \tertiary{...}  — tertiary text in stone
 %%   \sep / \dotsep  — fixed-size separator with stable spacing
 %%   \contactsep     — slightly wider separator for the header contact strip
+%%   \contactgap     — quiet, break-friendly gap between contact groups
 %%   \pipesep        — vertical-pipe separator (rare)
 %% ======================================================================
 \newcommand{\hl}[1]{{\color{kami@brand}#1}}
@@ -233,6 +234,10 @@
 \newcommand{\sep}{\nobreak\hspace{0.42em}\inkumo@dot\hspace{0.42em}\ignorespaces}
 \newcommand{\contactsep}{%
   \nobreak\hspace{0.56em}\inkumo@dot\hspace{0.56em}\penalty0\ignorespaces%
+}
+\newcommand{\contactgap}{%
+  % The kern leaves a stable breakpoint after hyperlink boundary nodes.
+  \nobreak\hspace{1.05em}\kern1pt\penalty0\ignorespaces%
 }
 \let\dotsep\sep
 \newcommand{\pipesep}{\,{\color{kami@stone}|}\,}

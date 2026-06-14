@@ -6,6 +6,8 @@ All notable changes to Inkumo are recorded here.
 
 - Keep release-asset compilation isolated so `make release-assets` writes only
   the two final PDFs to `dist/`.
+- Let header contact groups reflow between text-only and avatar layouts without
+  isolating the final profile link or leaving separators at wrapped edges.
 
 ## 0.2.1 - 2026-06-13
 

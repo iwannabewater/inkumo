@@ -30,7 +30,7 @@ layout-ready sample and should be replaced with personal details before use.
   unchanged.
 - A named icon API with codepoint bindings and public mappings isolated in
   separate modules.
-- Break-friendly contact rows and relaxed row text tuned for long names, roles,
+- Break-friendly contact flow and relaxed row text tuned for long names, roles,
   profile labels, and mixed Chinese / English content.
 - SHA-256 verified local retrieval for untracked font and icon assets.
 - GitHub Actions validation for the PDF, embedded fonts, page markers, footer,
@@ -155,7 +155,11 @@ Update the files under `content/` first:
 
 Use `\ContactHref{key}{url}{label}` for email, website, profile, and handle
 labels in the header. It keeps the icon attached to the label while allowing
-long labels and the contact line to wrap cleanly.
+long labels and the contact line to wrap cleanly. Keep contact items in one
+continuous sequence instead of inserting manual `\\` breaks, because the
+available width changes between text-only and avatar headers. Use
+`\contactgap` for a quiet, break-friendly boundary between logical contact
+groups; use `\contactsep` between items within a group.
 
 If a profile photo is appropriate for your target market, call
 `\inkumoavatar` before `\inkumoheader` in `content/header.tex`:
