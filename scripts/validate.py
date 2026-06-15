@@ -16,6 +16,7 @@ ICON_USAGE_PATTERN = re.compile(
 CONTACT_URL_PATTERN = re.compile(
     r"\\ContactHref\{[^{}]+\}\{([^{}]+)\}\{"
 )
+COMPACT_HEADER_ICON_KEYS = ("x", "zhihu")
 FORBIDDEN_TRACKED_PATTERNS = (
     "*.pdf",
     "avatar.*",
@@ -180,9 +181,19 @@ def write_icon_audit(registry_path, output_path):
     lines = [
         r"\documentclass{inkumo}",
         r"\input{lib/icons.tex}",
+        r"\newcommand{\AssertCompactHeaderIcon}[1]{%",
+        r"  \setbox0=\hbox{\PIcon{#1}}%",
+        r"  \ifdim\wd0>8.5pt\errmessage{Header icon #1 exceeds compact width}\fi%",
+        r"  \dimen0=\ht0\advance\dimen0 by \dp0%",
+        r"  \ifdim\dimen0>8.5pt\errmessage{Header icon #1 exceeds compact height}\fi%",
+        r"}",
         r"\begin{document}",
     ]
     lines.extend(r"\setbox0=\hbox{\PIcon{%s}}" % key for key in keys)
+    lines.extend(
+        r"\AssertCompactHeaderIcon{%s}" % key
+        for key in COMPACT_HEADER_ICON_KEYS
+    )
     lines.extend(["icon registry audit", r"\end{document}"])
     output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
