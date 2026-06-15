@@ -24,6 +24,9 @@ avatar support, or sample content.
   stable document concept.
 - Keep `lib/icons.tex` as the public facade; codepoints belong in
   `lib/icon-glyphs.tex` and key mappings in `lib/icon-registry.tex`.
+- Route every production glyph through `\PIcon`. Keep its shared baseline,
+  minimum slot, and visual bounds consistent, but preserve natural aspect ratios
+  and allow wide glyphs to use wider slots.
 - Use `\ContactHref` for clickable header labels so long labels and the contact
   line can wrap cleanly without detaching icons from labels. Compose the header
   with `\ContactGroups{primary}{profile}` so contact/social links and profile

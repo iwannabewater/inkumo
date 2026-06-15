@@ -74,28 +74,46 @@
 }
 \newsavebox{\inkumo@iconrawbox}
 \newsavebox{\inkumo@iconfitbox}
-\newlength{\inkumo@iconvisualwidth}
-\newlength{\inkumo@iconvisualheight}
-\newlength{\inkumo@iconslotwidth}
+% Preserve each glyph's natural proportions. The component only caps outliers,
+% gives narrow icons a stable minimum slot, and aligns providers to one baseline.
+\newlength{\inkumo@iconmaxwidth}
+\newlength{\inkumo@iconmaxheight}
+\newlength{\inkumo@icontallmaxheight}
+\newlength{\inkumo@iconminslotwidth}
 \newlength{\inkumo@iconslotheight}
 \newlength{\inkumo@iconslotdepth}
-\setlength{\inkumo@iconvisualwidth}{8.2pt}
-\setlength{\inkumo@iconvisualheight}{8.2pt}
-\setlength{\inkumo@iconslotwidth}{8.8pt}
-\setlength{\inkumo@iconslotheight}{7.25pt}
-\setlength{\inkumo@iconslotdepth}{0.95pt}
-\newcommand{\inkumo@iconcomponent}[1]{%
+\setlength{\inkumo@iconmaxwidth}{11pt}
+\setlength{\inkumo@iconmaxheight}{8.2pt}
+\setlength{\inkumo@icontallmaxheight}{8.6pt}
+\setlength{\inkumo@iconminslotwidth}{8.8pt}
+\setlength{\inkumo@iconslotheight}{7.55pt}
+\setlength{\inkumo@iconslotdepth}{1.05pt}
+\newcommand{\inkumo@fiticon}[1]{%
   \sbox{\inkumo@iconrawbox}{#1}%
-  \sbox{\inkumo@iconfitbox}{%
-    \resizebox{\inkumo@iconvisualwidth}{!}{\usebox{\inkumo@iconrawbox}}%
-  }%
-  \dimen@=\ht\inkumo@iconfitbox
-  \advance\dimen@ by \dp\inkumo@iconfitbox
-  \ifdim\dimen@>\inkumo@iconvisualheight
+  \sbox{\inkumo@iconfitbox}{\usebox{\inkumo@iconrawbox}}%
+  \dimen@=\ht\inkumo@iconrawbox
+  \advance\dimen@ by \dp\inkumo@iconrawbox
+  \@tempdima=\dimen@
+  \multiply\@tempdima by 4
+  \divide\@tempdima by 5
+  \ifdim\wd\inkumo@iconrawbox<\@tempdima
+    \@tempdimb=\inkumo@icontallmaxheight
+  \else
+    \@tempdimb=\inkumo@iconmaxheight
+  \fi
+  \ifdim\dimen@>\@tempdimb
     \sbox{\inkumo@iconfitbox}{%
-      \resizebox*{!}{\inkumo@iconvisualheight}{\usebox{\inkumo@iconrawbox}}%
+      \resizebox*{!}{\@tempdimb}{\usebox{\inkumo@iconrawbox}}%
     }%
   \fi
+  \ifdim\wd\inkumo@iconfitbox>\inkumo@iconmaxwidth
+    \sbox{\inkumo@iconfitbox}{%
+      \resizebox{\inkumo@iconmaxwidth}{!}{\usebox{\inkumo@iconrawbox}}%
+    }%
+  \fi
+}
+\newcommand{\inkumo@iconcomponent}[1]{%
+  \inkumo@fiticon{#1}%
   \dimen@=\inkumo@iconslotheight
   \advance\dimen@ by -\inkumo@iconslotdepth
   \divide\dimen@ by 2
@@ -104,7 +122,11 @@
   \divide\@tempdima by 2
   \advance\dimen@ by -\@tempdima
   \raisebox{\dimen@}[\inkumo@iconslotheight][\inkumo@iconslotdepth]{%
-    \makebox[\inkumo@iconslotwidth][c]{\usebox{\inkumo@iconfitbox}}%
+    \ifdim\wd\inkumo@iconfitbox<\inkumo@iconminslotwidth
+      \makebox[\inkumo@iconminslotwidth][c]{\usebox{\inkumo@iconfitbox}}%
+    \else
+      \usebox{\inkumo@iconfitbox}%
+    \fi
   }%
 }
 \NewDocumentCommand{\PIcon}{O{kami@darkwarm} m}{%

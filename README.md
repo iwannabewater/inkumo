@@ -201,8 +201,10 @@ followed by optional `\Stack`, `\Desc`, and `Bullets`.
 ## Icons
 
 Inkumo renders font-based icons only. Every source passes through the same
-`\PIcon` component, which preserves aspect ratio while normalizing visual
-bounds, slot width, and baseline across providers.
+`\PIcon` component, which preserves natural aspect ratios while applying
+shape-aware visual bounds, a stable minimum inline slot, and one baseline
+contract across providers. Wide glyphs retain the horizontal room their form
+requires instead of being compressed into a square.
 
 | Source | Local artifact | Usage |
 |---|---|---|
