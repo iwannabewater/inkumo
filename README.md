@@ -200,7 +200,9 @@ followed by optional `\Stack`, `\Desc`, and `Bullets`.
 
 ## Icons
 
-Inkumo renders font-based icons only.
+Inkumo renders font-based icons only. Every source passes through the same
+`\PIcon` component, which preserves aspect ratio while normalizing visual
+bounds, slot width, and baseline across providers.
 
 | Source | Local artifact | Usage |
 |---|---|---|
@@ -221,6 +223,9 @@ Technology keys stay readable at the content boundary:
 
 Public mappings live in `lib/icon-registry.tex`; font codepoint bindings stay
 isolated in `lib/icon-glyphs.tex`; `lib/icons.tex` is the stable import facade.
+Production content and class chrome use named `\PIcon` keys instead of calling
+provider glyphs directly. Use `\PIcon[InkBlue]{github}` when a specific context
+needs a non-default icon color.
 
 ## Reproducible Assets
 

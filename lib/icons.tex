@@ -9,8 +9,8 @@
 %% External font codepoints live in icon-glyphs.tex; default public mappings
 %% live in icon-registry.tex. Keep this file as the stable import facade.
 %%
-%% Sizing & color come from \PIcon — do not embed those in your mapping;
-%% just give the glyph itself.
+%% Geometry and color come from the single \PIcon component. Provider adapters
+%% only select a font and return a raw glyph; do not size or position mappings.
 %%
 %% Example overrides:
 %%   \definePIcon{blog}{\faRssSquare}                % Font Awesome RSS square
@@ -45,21 +45,14 @@
 }
 \NewDocumentCommand{\DIcon}{m}{%
   \ifinkumo@devicon%
-    \raisebox{-0.04ex}{{\inkumoDevicon\symbol{"#1}}}%
+    {\inkumoDevicon\symbol{"#1}}%
   \else%
     \faQuestionCircle
   \fi%
 }
 \NewDocumentCommand{\SIcon}{m}{%
   \ifinkumo@simpleicons%
-    {\tracinglostchars=0\raisebox{-0.04ex}{{\inkumoSimpleIcons\symbol{"#1}}}}%
-  \else%
-    \faQuestionCircle
-  \fi%
-}
-\NewDocumentCommand{\SIconCompact}{m}{%
-  \ifinkumo@simpleicons%
-    {\tracinglostchars=0\raisebox{-0.04ex}{\scalebox{0.95}{{\inkumoSimpleIcons\symbol{"#1}}}}}%
+    {\tracinglostchars=0\inkumoSimpleIcons\symbol{"#1}}%
   \else%
     \faQuestionCircle
   \fi%
@@ -79,14 +72,49 @@
     ] (x) {#1};%
   }%
 }
-\NewDocumentCommand{\PIcon}{m}{%
+\newsavebox{\inkumo@iconrawbox}
+\newsavebox{\inkumo@iconfitbox}
+\newlength{\inkumo@iconvisualwidth}
+\newlength{\inkumo@iconvisualheight}
+\newlength{\inkumo@iconslotwidth}
+\newlength{\inkumo@iconslotheight}
+\newlength{\inkumo@iconslotdepth}
+\setlength{\inkumo@iconvisualwidth}{8.2pt}
+\setlength{\inkumo@iconvisualheight}{8.2pt}
+\setlength{\inkumo@iconslotwidth}{8.8pt}
+\setlength{\inkumo@iconslotheight}{7.25pt}
+\setlength{\inkumo@iconslotdepth}{0.95pt}
+\newcommand{\inkumo@iconcomponent}[1]{%
+  \sbox{\inkumo@iconrawbox}{#1}%
+  \sbox{\inkumo@iconfitbox}{%
+    \resizebox{\inkumo@iconvisualwidth}{!}{\usebox{\inkumo@iconrawbox}}%
+  }%
+  \dimen@=\ht\inkumo@iconfitbox
+  \advance\dimen@ by \dp\inkumo@iconfitbox
+  \ifdim\dimen@>\inkumo@iconvisualheight
+    \sbox{\inkumo@iconfitbox}{%
+      \resizebox*{!}{\inkumo@iconvisualheight}{\usebox{\inkumo@iconrawbox}}%
+    }%
+  \fi
+  \dimen@=\inkumo@iconslotheight
+  \advance\dimen@ by -\inkumo@iconslotdepth
+  \divide\dimen@ by 2
+  \@tempdima=\ht\inkumo@iconfitbox
+  \advance\@tempdima by -\dp\inkumo@iconfitbox
+  \divide\@tempdima by 2
+  \advance\dimen@ by -\@tempdima
+  \raisebox{\dimen@}[\inkumo@iconslotheight][\inkumo@iconslotdepth]{%
+    \makebox[\inkumo@iconslotwidth][c]{\usebox{\inkumo@iconfitbox}}%
+  }%
+}
+\NewDocumentCommand{\PIcon}{O{kami@darkwarm} m}{%
   \begingroup
-  \color{kami@darkwarm}%
+  \color{#1}%
   \fontsize{8.8pt}{8.8pt}\selectfont
-  \ifcsname inkumo@picon@#1\endcsname
-    \csname inkumo@picon@#1\endcsname
+  \ifcsname inkumo@picon@#2\endcsname
+    \inkumo@iconcomponent{\csname inkumo@picon@#2\endcsname}%
   \else
-    \faQuestionCircle
+    \inkumo@iconcomponent{\faQuestionCircle}%
   \fi
   \endgroup
 }

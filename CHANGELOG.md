@@ -4,8 +4,15 @@ All notable changes to Inkumo are recorded here.
 
 ## Unreleased
 
-- Balanced X and Zhihu header icon sizing against the surrounding contact
-  icons.
+## 0.3.1 - 2026-06-15
+
+- Unified Font Awesome, Devicon, Simple Icons, and text-badge glyphs behind one
+  aspect-ratio-preserving icon component with consistent visual bounds,
+  spacing, and baseline alignment.
+- Routed class chrome through named icon keys and added optional per-use color
+  while preserving the existing `\PIcon` and `\definePIcon` interfaces.
+- Expanded icon validation to enforce identical slots across every registry key
+  and reject production glyphs that bypass the shared component.
 
 ## 0.3.0 - 2026-06-15
 

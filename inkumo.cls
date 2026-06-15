@@ -9,7 +9,7 @@
 %%          XCharter (Latin, Bitstream Charter-derived, ships with TeX Live)
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{inkumo}[2026/06/15 v0.3.0 Inkumo - Kami-system resume class]
+\ProvidesClass{inkumo}[2026/06/15 v0.3.1 Inkumo - Kami-system resume class]
 
 %% ======================================================================
 %% Engine check
@@ -108,7 +108,7 @@
 \newcommand{\inkumo@footersep}{%
   \hspace{0.45em}{\color{kami@stone}\raisebox{0.26ex}{\rule{1.2pt}{1.2pt}}}\hspace{0.45em}%
 }
-\newcommand{\inkumo@writeicon}{{\color{kami@brandlight}\faPenNib}}
+\newcommand{\inkumo@writeicon}{\PIcon[kami@brandlight]{write}}
 
 \AddToHook{shipout/foreground}{%
   \begin{tikzpicture}[remember picture, overlay]

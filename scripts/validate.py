@@ -16,7 +16,9 @@ ICON_USAGE_PATTERN = re.compile(
 CONTACT_URL_PATTERN = re.compile(
     r"\\ContactHref\{[^{}]+\}\{([^{}]+)\}\{"
 )
-COMPACT_HEADER_ICON_KEYS = ("x", "zhihu")
+DIRECT_ICON_PATTERN = re.compile(
+    r"\\(?:fa[A-Z][A-Za-z]*|DIcon|SIcon|TextPIcon)\b"
+)
 FORBIDDEN_TRACKED_PATTERNS = (
     "*.pdf",
     "avatar.*",
@@ -82,6 +84,18 @@ def validate_source(root):
     missing = sorted(set(ICON_USAGE_PATTERN.findall(content)) - definitions)
     if missing:
         fail("missing icon mappings for content keys: " + ", ".join(missing))
+
+    production_sources = [root / "inkumo.cls", *sources]
+    direct_icon_usage = [
+        str(path.relative_to(root))
+        for path in production_sources
+        if DIRECT_ICON_PATTERN.search(read_text(path))
+    ]
+    if direct_icon_usage:
+        fail(
+            "production icons must render through PIcon: "
+            + ", ".join(direct_icon_usage)
+        )
 
     forbidden = [
         path
@@ -181,19 +195,31 @@ def write_icon_audit(registry_path, output_path):
     lines = [
         r"\documentclass{inkumo}",
         r"\input{lib/icons.tex}",
-        r"\newcommand{\AssertCompactHeaderIcon}[1]{%",
+        r"\newdimen\IconAuditWidth",
+        r"\newdimen\IconAuditHeight",
+        r"\newdimen\IconAuditDepth",
+        r"\newcommand{\AssertUnifiedIconSlot}[1]{%",
         r"  \setbox0=\hbox{\PIcon{#1}}%",
-        r"  \ifdim\wd0>8.5pt\errmessage{Header icon #1 exceeds compact width}\fi%",
-        r"  \dimen0=\ht0\advance\dimen0 by \dp0%",
-        r"  \ifdim\dimen0>8.5pt\errmessage{Header icon #1 exceeds compact height}\fi%",
+        r"  \ifdim\wd0=\IconAuditWidth\else",
+        r"    \errmessage{Icon #1 has inconsistent slot width}%",
+        r"  \fi",
+        r"  \ifdim\ht0=\IconAuditHeight\else",
+        r"    \errmessage{Icon #1 has inconsistent slot height}%",
+        r"  \fi",
+        r"  \ifdim\dp0=\IconAuditDepth\else",
+        r"    \errmessage{Icon #1 has inconsistent slot depth}%",
+        r"  \fi",
         r"}",
         r"\begin{document}",
+        r"\setbox2=\hbox{\PIcon{phone}}%",
+        r"\IconAuditWidth=\wd2",
+        r"\IconAuditHeight=\ht2",
+        r"\IconAuditDepth=\dp2",
+        r"\ifdim\IconAuditWidth>0pt\else",
+        r"  \errmessage{Unified icon slot width must be positive}%",
+        r"\fi",
     ]
-    lines.extend(r"\setbox0=\hbox{\PIcon{%s}}" % key for key in keys)
-    lines.extend(
-        r"\AssertCompactHeaderIcon{%s}" % key
-        for key in COMPACT_HEADER_ICON_KEYS
-    )
+    lines.extend(r"\AssertUnifiedIconSlot{%s}" % key for key in keys)
     lines.extend(["icon registry audit", r"\end{document}"])
     output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
